@@ -4,10 +4,10 @@ project(tetris)
 set(CMAKE_CXX_STANDARD 17)
 
 add_executable(tetris
-        main.cpp
+        src/main.cpp
         )
 
-#list(APPEND CMAKE_PREFIX_PATH path/to/lib/SDL2-2.28.5)
+#list(APPEND CMAKE_PREFIX_PATH P:/tool/SDL2-2.28.5)
 
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
