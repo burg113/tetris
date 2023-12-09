@@ -13,15 +13,15 @@ void KeyboardAdapter::update() {
         if (event.type == SDL_KEYDOWN) {
             keys[event.key.keysym.scancode] = true;
 
-            for (auto listener: listeners) listener->emplace(event.key.keysym.scancode);
+            for (auto listener: listeners) listener->emplace(true,event.key.keysym.scancode);
         }
         if (event.type == SDL_KEYUP) {
             keys[event.key.keysym.scancode] = false;
-            for (auto listener: listeners) listener->emplace(event.key.keysym.scancode);
+            for (auto listener: listeners) listener->emplace(false,event.key.keysym.scancode);
         }
         if (event.type == SDL_QUIT) {
             quit = true;
-            for (auto listener: listeners) listener->emplace(-1);
+            for (auto listener: listeners) listener->emplace(-1,-1);
         }
     }
 
@@ -42,28 +42,29 @@ void KeyboardAdapter::unRegisterListener(KeyboardAdapter::Listener *listener) {
     listeners.erase(listener);
 }
 
-KeyboardAdapter::Listener::Listener(const std::vector<std::function<void()>> &callBacks,
-                                    KeyboardAdapter *keyboardAdapter)
-        : callBacks(callBacks), keyboardAdapter(keyboardAdapter) {
 
-}
+KeyboardAdapter::Listener::Listener(const std::vector<std::function<void()>> &callBacks): callBacks(callBacks) {}
 
-void KeyboardAdapter::Listener::emplace(int val) {
-    eventStream.emplace_front(val);
+void KeyboardAdapter::Listener::emplace(bool b, int val) {
+    eventStream.emplace_front(b,val);
 }
 
 void KeyboardAdapter::Listener::update() {
     for (const auto &f: callBacks) f();
 }
 
-
 bool KeyboardAdapter::Listener::hasEvent() {
     return !eventStream.empty();
 }
 
-int KeyboardAdapter::Listener::getEvent() {
-    if (eventStream.empty()) return -1;
-    int a = eventStream.back();
+std::pair<bool,int> KeyboardAdapter::Listener::extractEvent() {
+    if (eventStream.empty()) return {-1,-1};
+    std::pair<bool,int> a = eventStream.back();
     eventStream.pop_back();
     return a;
 }
+
+void KeyboardAdapter::Listener::voidEvents() {
+    while (!eventStream.empty()) eventStream.pop_back();
+}
+

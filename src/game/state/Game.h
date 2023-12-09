@@ -34,7 +34,6 @@ class Game : public State {
             }
     };
 
-
     struct Piece {
         SDL_Color col;
         std::vector<Vec2> tiles;
@@ -42,7 +41,6 @@ class Game : public State {
 
         explicit Piece(std::vector<Vec2> tiles, int type, SDL_Color col);
     };
-
 
     Piece jPiece = Piece({Vec2(-1, -1), Vec2(-1, 0), Vec2(0, 0), Vec2(1, 0)}, 0, {20, 20, 200, 255});
     Piece lPiece = Piece({Vec2(-1, 0), Vec2(0, 0), Vec2(1, 0), Vec2(1, -1)}, 0, {240, 180, 20, 255});
@@ -54,23 +52,38 @@ class Game : public State {
     Piece oPiece = Piece({Vec2(0, 0), Vec2(1, 0), Vec2(0, -1), Vec2(1, -1)}, 2, {215, 220, 0, 255});
 
     Tetris *tetris;
-    KeyboardAdapter *keyboard;
+
+
     Board board;
+
+    KeyboardAdapter::Listener keyboardListener;
+    SDL_Scancode KEY_INSTA_DROP = SDL_Scancode::SDL_SCANCODE_SPACE;
+    SDL_Scancode KEY_FAST_FALL = SDL_Scancode::SDL_SCANCODE_LCTRL;
+
+    SDL_Scancode KEY_RIGHT = SDL_Scancode::SDL_SCANCODE_RIGHT;
+    SDL_Scancode KEY_LEFT = SDL_Scancode::SDL_SCANCODE_LEFT;
+    SDL_Scancode KEY_ROTATE_RIGHT = SDL_Scancode::SDL_SCANCODE_UP;
+    SDL_Scancode KEY_ROTATE_LEFT = SDL_Scancode::SDL_SCANCODE_DOWN;
+
+    int holdFrameCooldown = 5;
+    int inpL = -1, inpR = -1;
+    int holdFrameRotationCooldown = 15;
+    int inpRl = -1, inpRr = -1;
+    bool instaDrop = false;
+
 
     bool smoothAnimation = true;
 
     int framesPerFall = 10;
     int lockLeniency = 8;
+    int fastFallExtraSpeed = 5;
+
     int frameCount = 0;
     int framesToFall = 0;
     Vec2 position;
     int rotation = 0;
     Piece piece;
 
-    int holdFrameCooldown = 5;
-    int inpL = 0, inpR = 0;
-    int holdFrameRotationCooldown = 15;
-    int inpRl = 0, inpRr = 0;
 public:
     explicit Game(Tetris *tetris);
 
@@ -80,13 +93,19 @@ public:
 
     bool checkPos(Vec2 pos);
 
+
     void update() override;
 
-    void tryRotate(bool clockwise);
-
-    Piece getNextTetromino();
+    void handleInput();
+    void handleInputCallback();
 
     void render();
+
+    void lockPiece();
+
+    bool tryRotate(bool clockwise);
+
+    Piece getNextTetromino();
 
     void reset() override;
 

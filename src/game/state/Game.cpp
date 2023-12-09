@@ -6,43 +6,56 @@
 
 #include <utility>
 
+Game::Game(Tetris *tetris) : tetris(tetris), board(0, 0), piece(iPiece),
+                             keyboardListener({[this]() { handleInputCallback(); }}) {
+
+    KeyboardAdapter::get()->registerListener(&keyboardListener);
+    reset();
+}
+
+
+void Game::reset() {
+    board = Board(10, 20);
+    piece = iPiece;
+    resetPiece();
+}
+
+
 void Game::update() {
-    bool l = keyboard->isDown(SDL_Scancode::SDL_SCANCODE_LEFT);
-    bool r = keyboard->isDown(SDL_Scancode::SDL_SCANCODE_RIGHT);
-    if (l && !r) inpL++, inpR = 0;
-    else if (r && !l) inpL = 0, inpR++;
-    else inpL = inpR = 0;
 
-    bool rl = keyboard->isDown(SDL_Scancode::SDL_SCANCODE_DOWN);
-    bool rr = keyboard->isDown(SDL_Scancode::SDL_SCANCODE_UP);
+    handleInput();
 
-    if (rl && !rr) inpRl++, inpRr = 0;
-    else if (rr && !rl) inpRl = 0, inpRr++;
-    else inpRl = inpRr = 0;
+    if (inpL >= 0 && checkOffset(Vec2(-1, 0))) {
+        inpL = -holdFrameCooldown;
+        position.x -= 1;
+    }
+    if (inpR >= 0 && checkOffset(Vec2(1, 0))) {
+        inpR = -holdFrameCooldown;
+        position.x += 1;
+    }
 
+    if (inpRl % holdFrameRotationCooldown >= 0) {
+        if (tryRotate(0)) inpRl = -holdFrameRotationCooldown;
+    }
+    if (inpRr >= 0) {
+        if (tryRotate(1)) inpRr = -holdFrameRotationCooldown;
+    }
 
-    if (inpL % holdFrameCooldown == 1 && checkOffset(Vec2(-1, 0))) position.x -= 1;
-    if (inpR % holdFrameCooldown == 1 && checkOffset(Vec2(1, 0))) position.x += 1;
+    if (KeyboardAdapter::get()->isDown(KEY_FAST_FALL)) {
+        framesToFall-=fastFallExtraSpeed;
+    }
 
-    if (inpRl % holdFrameRotationCooldown == 1) tryRotate(0);
-    if (inpRr % holdFrameRotationCooldown == 1) tryRotate(1);
+    if (instaDrop) {
+        while (checkOffset(Vec2(0, 1))) position+= Vec2(0, 1);
+        lockPiece();
+        instaDrop = false;
+    }
 
 
     if (framesToFall <= 0) {
         if (!checkOffset(Vec2(0, 1))) {
             if (-framesToFall >= lockLeniency) {
-                framesToFall = framesPerFall;
-                for (Vec2 v: piece.tiles) {
-                    Vec2 p = v.rot(rotation) + position;
-                    board[p] = 1;
-                }
-
-                board.update();
-
-                resetPiece();
-                if (!checkPos(position, piece, rotation)) {
-                    board.reset();
-                }
+                lockPiece();
             }
         } else {
             framesToFall = framesPerFall;
@@ -53,6 +66,45 @@ void Game::update() {
     frameCount++;
     framesToFall--;
     render();
+}
+
+void Game::lockPiece() {
+    framesToFall = framesPerFall;
+
+    for (Vec2 v: piece.tiles) {
+        Vec2 p = v.rot(rotation) + position;
+        board[p] = 1;
+    }
+
+    board.update();
+
+    resetPiece();
+
+    if (!checkPos(position, piece, rotation)) {
+        board.reset();
+    }
+}
+
+
+void Game::handleInput() {
+    bool l = KeyboardAdapter::get()->isDown(KEY_LEFT);
+    bool r = KeyboardAdapter::get()->isDown(KEY_RIGHT);
+    if (l && !r) inpL++, inpR = -1;
+    else if (r && !l) inpL = -1, inpR++;
+    else inpL = inpR = -1;
+
+    bool rl = KeyboardAdapter::get()->isDown(KEY_ROTATE_LEFT);
+    bool rr = KeyboardAdapter::get()->isDown(KEY_ROTATE_RIGHT);
+    if (rl && !rr) inpRl++, inpRr = -1;
+    else if (rr && !rl) inpRl = -1, inpRr++;
+    else inpRl = inpRr = -1;
+}
+
+void Game::handleInputCallback() {
+    while (keyboardListener.hasEvent()) {
+        auto [pressed,key] = keyboardListener.extractEvent();
+        if (pressed && key == KEY_INSTA_DROP) instaDrop = true;
+    }
 }
 
 void Game::render() {
@@ -83,24 +135,10 @@ void Game::render() {
     }
 }
 
-
-void Game::reset() {
-    board = Board(10, 20);
-    piece = iPiece;
-    resetPiece();
-}
-
 void Game::resetPiece() {
     piece = getNextTetromino();
-    // piece = jPiece;
     position = Vec2((board.width - 1) / 2, 1);
     rotation = 0;
-}
-
-
-Game::Game(Tetris *tetris) : tetris(tetris), board(0, 0), piece(iPiece) {
-    keyboard = KeyboardAdapter::get();
-    reset();
 }
 
 bool Game::checkPos(Vec2 pos, Piece &p, int rot) {
@@ -127,20 +165,20 @@ bool Game::checkOffset(Vec2 posOffset) {
     return checkPos(position + posOffset, piece, rotation);
 }
 
-void Game::tryRotate(bool clockwise) {
+bool Game::tryRotate(bool clockwise) {
     rotation = (rotation % 4 + 4) % 4;
     if (clockwise) {
         for (int i = 0; i < rotationTable[piece.type][0].size(); i++) {
-            Vec2 rotOffset = rotationTable[piece.type][rotation][i] - rotationTable[piece.type][(rotation+1)%4][i];
+            Vec2 rotOffset = rotationTable[piece.type][rotation][i] - rotationTable[piece.type][(rotation + 1) % 4][i];
             if (checkPos(position + rotOffset, piece, rotation + 1)) {
                 position += rotOffset;
                 rotation++;
                 break;
             }
         }
-    }else {
+    } else {
         for (int i = 0; i < rotationTable[piece.type][0].size(); i++) {
-            Vec2 rotOffset = rotationTable[piece.type][rotation][i] - rotationTable[piece.type][(rotation+3)%4][i];
+            Vec2 rotOffset = rotationTable[piece.type][rotation][i] - rotationTable[piece.type][(rotation + 3) % 4][i];
             if (checkPos(position + rotOffset, piece, rotation + 1)) {
                 position += rotOffset;
                 rotation--;

@@ -63,7 +63,6 @@ void Board::reset() {
 }
 
 void Board::update() {
-
     for (int y = 0; y < height; y++) {
         int clear = true;
         for (int x = 0; x < width; x++) {

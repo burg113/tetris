@@ -14,21 +14,21 @@
 
 // should be unique
 class KeyboardAdapter {
+public:
     class Listener {
-        std::deque<int> eventStream;                // oldest events can be read& popped from back
+        std::deque<std::pair<bool,int>> eventStream;                // oldest events can be read& popped from back
         std::vector<std::function<void()>> callBacks;
     public:
-        KeyboardAdapter *keyboardAdapter;
+        explicit Listener(const std::vector<std::function<void()>> &callBacks);
 
-        explicit Listener(const std::vector<std::function<void()>> &callBacks, KeyboardAdapter *keyboardAdapter);
-
-        void emplace(int val);
+        void emplace(bool b, int val);
         void update();
 
         bool hasEvent();
-        int getEvent();     // gets next event. -1 if no events are present. Note that -1 may also be a valid event.
+        std::pair<bool,int> extractEvent();     // gets next event. -1 if no events are present. Note that -1 may also be a valid event.
+        void voidEvents();
     };
-
+private:
     std::vector<bool> keys;
 
     std::set<Listener *> listeners;
