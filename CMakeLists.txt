@@ -18,6 +18,7 @@ include_directories(
 
 if(MINGW)
     target_link_libraries(tetris ws2_32)
+    target_link_libraries(tetris wsock32)
 endif()
 
 #list(APPEND CMAKE_PREFIX_PATH P:/tool/SDL2-2.28.5)

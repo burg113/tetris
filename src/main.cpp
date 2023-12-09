@@ -65,6 +65,7 @@ map<string, CmdLineArg> commandLineArguments;
 
 int32_t main(int argc, char *argv[]) {
     testNetworking();
+    return 0;
 
     commandLineArguments["-debug"] = CmdLineArg(0, debug);
     commandLineArguments["-nogui"] = CmdLineArg(1, noGui);
@@ -89,8 +90,6 @@ int32_t main(int argc, char *argv[]) {
 
         cmdLineArg.execute();
     }
-
-    return 0;
 
     if (dedicatedServer) {
         if (openWindow) {
