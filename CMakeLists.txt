@@ -12,6 +12,14 @@ add_executable(tetris
         src/networking/Networking.cpp
         )
 
+include_directories(
+        lib/asio/asio/include
+)
+
+if(MINGW)
+    target_link_libraries(tetris ws2_32)
+endif()
+
 #list(APPEND CMAKE_PREFIX_PATH P:/tool/SDL2-2.28.5)
 
 find_package(SDL2 REQUIRED)

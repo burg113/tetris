@@ -3,3 +3,10 @@
 //
 
 #include "Networking.h"
+#include <asio.hpp>
+
+using asio::ip::tcp;
+
+void testNetworking(){
+
+}

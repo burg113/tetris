@@ -4,6 +4,8 @@
 #include "game/io/Window.h"
 #include "game/Tetris.h"
 
+#include "networking/Networking.h"
+
 /* Sets constants */
 #define WIDTH 800
 #define HEIGHT 600
@@ -16,18 +18,18 @@ bool openWindow = true;
 short debugLevel = -1;
 
 // save get int
-int getInt(string &s) {
+int getInt(const string &s) {
     if (s.empty() ||
         std::find_if(s.begin(), s.end(), [](unsigned char c) { return !std::isdigit(c); }) != s.end())
         return -1;
     return stoi(s);
 }
 
-void noGui(string &s) {
+void noGui(const string &s) {
     openWindow = false;
 }
 
-void debug(string &s) {
+void debug(const string &s) {
     debugLevel = 0;
 
     debugLevel = (short) getInt(s);
@@ -36,18 +38,18 @@ void debug(string &s) {
     cerr << "debug level set to " << debugLevel << endl;
 }
 
-void server(string &s) {
+void server(const string &s) {
     dedicatedServer = true;
 }
 
 struct CmdLineArg {
     int priority;
-    function<void(string)> func;
+    function<void(const string&)> func;
     string payload;
 
     CmdLineArg() : priority(-1) {}
 
-    CmdLineArg(int priority, const function<void(string)> &execute) : priority(priority), func(execute) {}
+    CmdLineArg(int priority, const function<void(const string&)> &execute) : priority(priority), func(execute) {}
 
     bool operator<(const CmdLineArg &other) const {
         return priority < other.priority;
@@ -62,6 +64,8 @@ struct CmdLineArg {
 map<string, CmdLineArg> commandLineArguments;
 
 int32_t main(int argc, char *argv[]) {
+    testNetworking();
+
     commandLineArguments["-debug"] = CmdLineArg(0, debug);
     commandLineArguments["-nogui"] = CmdLineArg(1, noGui);
     commandLineArguments["-server"] = CmdLineArg(10, server);
@@ -86,6 +90,7 @@ int32_t main(int argc, char *argv[]) {
         cmdLineArg.execute();
     }
 
+    return 0;
 
     if (dedicatedServer) {
         if (openWindow) {

@@ -11,4 +11,6 @@ class Networking {
 };
 
 
+void testNetworking();
+
 #endif //TETRIS_NETWORKING_H

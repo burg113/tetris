@@ -15,8 +15,8 @@ class Board {
 public:
     Board(int w, int h);
 
-    vector<char> serialize();
-    void deserialize(vector<char> &data);
+    std::vector<char> serialize();
+    void deserialize(std::vector<char> &data);
 
     void debug();
 };
