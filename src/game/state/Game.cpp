@@ -92,7 +92,7 @@ void Game::reset() {
 
 void Game::resetPiece() {
     piece = getNextTetromino();
-
+    // piece = jPiece;
     position = Vec2((board.width - 1) / 2, 1);
     rotation = 0;
 }
@@ -138,6 +138,16 @@ void Game::tryRotate(bool clockwise) {
                 break;
             }
         }
+    }else {
+        for (int i = 0; i < rotationTable[piece.type][0].size(); i++) {
+            Vec2 rotOffset = rotationTable[piece.type][rotation][i] - rotationTable[piece.type][(rotation+3)%4][i];
+            if (checkPos(position + rotOffset, piece, rotation + 1)) {
+                position += rotOffset;
+                rotation--;
+                break;
+            }
+        }
+
     }
 }
 

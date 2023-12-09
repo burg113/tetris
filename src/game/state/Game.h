@@ -16,15 +16,15 @@ class Game : public State {
     // see https://tetris.wiki/Super_Rotation_System#How_Guideline_SRS_Really_Works
     std::vector<std::vector<std::vector<Vec2>>> rotationTable = {
             {{Vec2(0, 0), Vec2(0, 0),  Vec2(0, 0), Vec2(0, 0),  Vec2(0, 0)},
-             {Vec2(0, 0), Vec2(1, 0), Vec2(1, 1), Vec2(0, -2), Vec2(1, -2)},
-             {Vec2(0, 0),  Vec2(0, 0), Vec2(0, 0),  Vec2(0, 0), Vec2(0, 0)},
-             {Vec2(0, 0), Vec2(-1, 0), Vec2(-1, 1), Vec2(0, -2),  Vec2(-1, -2)}
+                    {Vec2(0, 0),  Vec2(1, 0), Vec2(1, 1), Vec2(0, -2), Vec2(1, -2)},
+                    {Vec2(0, 0),   Vec2(0, 0),  Vec2(0, 0),   Vec2(0, 0), Vec2(0, 0)},
+                    {Vec2(0, 0),  Vec2(-1, 0), Vec2(-1, 1), Vec2(0, -2), Vec2(-1, -2)}
             },
             {
              {Vec2(0, 0), Vec2(-1, 0), Vec2(2, 0), Vec2(-1, 0), Vec2(2, 0)},
-             {Vec2(-1, 0), Vec2(0, 0), Vec2(0, 0),  Vec2(0, -1), Vec2(0, 2)},
-             {Vec2(-1, -1), Vec2(1, -1), Vec2(-2, -1), Vec2(1, 0), Vec2(-2, 0)},
-             {Vec2(0, -1), Vec2(0, -1),  Vec2(0, -1),   Vec2(0, 1), Vec2(0, -2)}
+                    {Vec2(-1, 0), Vec2(0, 0), Vec2(0, 0), Vec2(0, -1), Vec2(0, 2)},
+                    {Vec2(-1, -1), Vec2(1, -1), Vec2(-2, -1), Vec2(1, 0), Vec2(-2, 0)},
+                    {Vec2(0, -1), Vec2(0, -1), Vec2(0, -1), Vec2(0, 1),  Vec2(0, -2)}
             },
             {
              {Vec2(0, 0)},
