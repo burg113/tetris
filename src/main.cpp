@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 
 #include <SDL.h>
+#include "game/io/Window.h"
+#include "game/Tetris.h"
 
 /* Sets constants */
 #define WIDTH 800
@@ -10,83 +12,104 @@
 using namespace std;
 
 bool dedicatedServer = false;
+bool openWindow = true;
+short debugLevel = -1;
 
-void noGui(string s){
-
+// save get int
+int getInt(string &s) {
+    if (s.empty() ||
+        std::find_if(s.begin(), s.end(), [](unsigned char c) { return !std::isdigit(c); }) != s.end())
+        return -1;
+    return stoi(s);
 }
 
-void debug(string s){
-
+void noGui(string &s) {
+    openWindow = false;
 }
 
-void server(string s){
+void debug(string &s) {
+    debugLevel = 0;
+
+    debugLevel = (short) getInt(s);
+    debugLevel = max(debugLevel, (short) 0);
+
+    cerr << "debug level set to " << debugLevel << endl;
+}
+
+void server(string &s) {
     dedicatedServer = true;
 }
 
-struct CmdLineArg{
+struct CmdLineArg {
     int priority;
-    function<void(string)> execute;
+    function<void(string)> func;
+    string payload;
 
-    CmdLineArg(): priority(-1) {}
+    CmdLineArg() : priority(-1) {}
 
-    CmdLineArg(int priority, const function<void(string)> &execute) : priority(priority), execute(execute) {}
+    CmdLineArg(int priority, const function<void(string)> &execute) : priority(priority), func(execute) {}
 
     bool operator<(const CmdLineArg &other) const {
         return priority < other.priority;
+    }
+
+    void execute() const {
+        func(payload);
     }
 };
 
 // priority and function to call
 map<string, CmdLineArg> commandLineArguments;
 
-int32_t main(int argc, char* argv[]) {
-    commandLineArguments["-debug"]=CmdLineArg(0, debug);
-    commandLineArguments["-nogui"]=CmdLineArg(1, noGui);
-    commandLineArguments["-server"]=CmdLineArg(10, server);
+int32_t main(int argc, char *argv[]) {
+    commandLineArguments["-debug"] = CmdLineArg(0, debug);
+    commandLineArguments["-nogui"] = CmdLineArg(1, noGui);
+    commandLineArguments["-server"] = CmdLineArg(10, server);
 
+    priority_queue<CmdLineArg> args;
 
-    priority_queue<pair<CmdLineArg,string>> args;
-
-    for(int i = 1;i<argc;i++) {
+    for (int i = 1; i < argc; i++) {
         string s = argv[i];
-        args.emplace(commandLineArguments[s],s);
+        if (commandLineArguments.count(s) == 1) {
+            CmdLineArg cmdLineArg = commandLineArguments[s];
+            if (i + 1 < argc && argv[i + 1][0] != '-') cmdLineArg.payload = argv[++i];
+            args.emplace(cmdLineArg);
+        } else {
+            cerr << "Invalid argument \"" << s << "\" ignored" << endl;
+        }
+    }
+
+    while (!args.empty()) {
+        CmdLineArg cmdLineArg = args.top();
+        args.pop();
+
+        cmdLineArg.execute();
     }
 
 
-/* Initialises data */
-    SDL_Window *window = NULL;
+    if (dedicatedServer) {
+        if (openWindow) {
+            Window window;
+        }
+        // todo: implement server
 
-    /*
-    * Initialises the SDL video subsystem (as well as the events subsystem).
-    * Returns 0 on success or a negative error code on failure using SDL_GetError().
-    */
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        fprintf(stderr, "SDL failed to initialise: %s\n", SDL_GetError());
-        return 1;
+
+    } else {
+        if (!openWindow) {
+            cerr << "cannot run game without window! exiting" << endl;
+            return 1;
+        }
+        if (openWindow) {
+            Window window;
+            if (!window.valid) {
+                cerr << "failed to create window! exiting" << endl;
+                return 1;
+            }
+            Tetris tetris(&window);
+            tetris.play();
+        }
     }
 
-    /* Creates a SDL window */
-    window = SDL_CreateWindow("SDL Example", /* Title of the SDL window */
-                              SDL_WINDOWPOS_UNDEFINED, /* Position x of the window */
-                              SDL_WINDOWPOS_UNDEFINED, /* Position y of the window */
-                              WIDTH, /* Width of the window in pixels */
-                              HEIGHT, /* Height of the window in pixels */
-                              0); /* Additional flag(s) */
-
-    /* Checks if window has been created; if not, exits program */
-    if (window == NULL) {
-        fprintf(stderr, "SDL window failed to initialise: %s\n", SDL_GetError());
-        return 1;
-    }
-
-    /* Pauses all SDL subsystems for a variable amount of milliseconds */
-    SDL_Delay(DELAY);
-
-    /* Frees memory */
-    SDL_DestroyWindow(window);
-
-    /* Shuts down all SDL subsystems */
-    SDL_Quit();
 
     return 0;
 }

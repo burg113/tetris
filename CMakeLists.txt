@@ -5,6 +5,11 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_executable(tetris
         src/main.cpp
+        src/game/io/Window.cpp
+        src/game/io/KeyboardAdapter.cpp
+        src/game/Tetris.cpp
+        src/game/Board.cpp
+        src/networking/Networking.cpp
         )
 
 #list(APPEND CMAKE_PREFIX_PATH P:/tool/SDL2-2.28.5)
