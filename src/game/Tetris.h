@@ -5,22 +5,41 @@
 #ifndef TETRIS_TETRIS_H
 #define TETRIS_TETRIS_H
 
+#include <stack>
+#include <memory>
 #include "io/Window.h"
 #include "io/KeyboardAdapter.h"
-#include "Board.h"
+#include "state/Board.h"
+#include "state/State.h"
+
+constexpr int STATE_COUNT = 3;
+enum StateEnum {
+    MAIN_MENU, GAME, MENU
+};
 
 class Tetris {
-    Window *window;
-
-    int myBoard;
-    std::vector<Board> boards;
-
+    int FRAMERATE = 60;
 public:
-    Tetris(Window *window) : window(window) {
+    Window *window;
+    KeyboardAdapter *keyboard;
 
-    };
+    std::vector<std::unique_ptr<State>> stateInstances;
+
+    std::stack<StateEnum> state;
+
+
+    Tetris(Window *window);
+
+    void popStateStack();
+    void gotoState(StateEnum s);
+
+
+    void reset();
 
     void play();
+
+    void update();
+
 };
 
 

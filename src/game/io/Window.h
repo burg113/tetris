@@ -5,16 +5,27 @@
 #include <SDL.h>
 #ifndef TETRIS_WINDOW_H
 #define TETRIS_WINDOW_H
-
+#include <vector>
 
 class Window {
     SDL_Window *window;
+    SDL_Renderer *sdlRenderer;
+    SDL_Texture *buffer;
+
+    std::vector<unsigned char> data;
 
 public:
-    bool valid = false;
-    Window();
+    int width, height;
 
-    virtual ~Window();
+    bool valid = false;
+    Window(int width,int height);
+
+    void draw(int x, int y, int dx, int dy, SDL_Color);
+
+    void render();
+
+    ~Window();
+
 
 };
 
