@@ -56,7 +56,6 @@ class Game : public State {
 
     Board board;
 
-    KeyboardAdapter::Listener keyboardListener;
     SDL_Scancode KEY_INSTA_DROP = SDL_Scancode::SDL_SCANCODE_SPACE;
     SDL_Scancode KEY_FAST_FALL = SDL_Scancode::SDL_SCANCODE_LCTRL;
 
@@ -97,7 +96,7 @@ public:
     void update() override;
 
     void handleInput();
-    void handleInputCallback();
+    void handleInputCallback(bool b, int input);
 
     void render();
 

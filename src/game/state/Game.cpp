@@ -6,10 +6,8 @@
 
 #include <utility>
 
-Game::Game(Tetris *tetris) : tetris(tetris), board(0, 0), piece(iPiece),
-                             keyboardListener({[this]() { handleInputCallback(); }}) {
-
-    KeyboardAdapter::get()->registerListener(&keyboardListener);
+Game::Game(Tetris *tetris) : tetris(tetris), board(0, 0), piece(iPiece) {
+    KeyboardAdapter::get()->registerCallback([this](bool b, int key) { handleInputCallback(b, key); });
     reset();
 }
 
@@ -22,7 +20,6 @@ void Game::reset() {
 
 
 void Game::update() {
-
     handleInput();
 
     if (inpL >= 0 && checkOffset(Vec2(-1, 0))) {
@@ -42,11 +39,11 @@ void Game::update() {
     }
 
     if (KeyboardAdapter::get()->isDown(KEY_FAST_FALL)) {
-        framesToFall-=fastFallExtraSpeed;
+        framesToFall -= fastFallExtraSpeed;
     }
 
     if (instaDrop) {
-        while (checkOffset(Vec2(0, 1))) position+= Vec2(0, 1);
+        while (checkOffset(Vec2(0, 1))) position += Vec2(0, 1);
         lockPiece();
         instaDrop = false;
     }
@@ -100,11 +97,8 @@ void Game::handleInput() {
     else inpRl = inpRr = -1;
 }
 
-void Game::handleInputCallback() {
-    while (keyboardListener.hasEvent()) {
-        auto [pressed,key] = keyboardListener.extractEvent();
-        if (pressed && key == KEY_INSTA_DROP) instaDrop = true;
-    }
+void Game::handleInputCallback(bool pressed, int key) {
+    if (pressed && key == KEY_INSTA_DROP) instaDrop = true;
 }
 
 void Game::render() {
@@ -185,7 +179,6 @@ bool Game::tryRotate(bool clockwise) {
                 break;
             }
         }
-
     }
 }
 
