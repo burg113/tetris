@@ -5,10 +5,9 @@
 #include "Window.h"
 // delay for closing
 #define DELAY 100       // ms
-#define byte unsigned char
 
 Window::Window(int width, int height) : width(width), height(height) {
-    data = std::vector<byte>(width * height * 4, 0);
+    data = std::vector<uint8_t>(width * height * 4, 0);
 
     valid = false;
     /* Initialises data */
@@ -55,7 +54,7 @@ void Window::render() {
     SDL_LockTexture(buffer, NULL, &pixels, &pitch);
 
     memcpy(pixels, data.data(), pitch * height);
-    data = std::vector<byte>(width * height * 4, 0);
+    data = std::vector<uint8_t>(width * height * 4, 0);
 
     SDL_UnlockTexture(buffer);
     SDL_RenderCopy(sdlRenderer, buffer, NULL, NULL);
@@ -68,7 +67,7 @@ void Window::draw(int x, int y, int dx, int dy, SDL_Color col) {
         return;
     }
 
-    std::vector<byte> row;
+    std::vector<uint8_t> row;
     for(int j = 0;j<dx;j++) {
         row.emplace_back(col.a);
         row.emplace_back(col.b);

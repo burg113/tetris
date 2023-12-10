@@ -15,7 +15,6 @@ add_executable(tetris
         src/game/state/Game.cpp
         src/game/utils/Vec2.cpp
         src/game/Tetris.cpp
-        src/game/Board.cpp
 
         examples/Networking.cpp
         src/networking/BinarySerialize.cpp src/networking/SocketWrapper.cpp src/networking/Server.cpp)

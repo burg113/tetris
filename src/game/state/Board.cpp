@@ -7,15 +7,13 @@ using namespace std;
 #include <iostream>
 #include "Board.h"
 
-#define byte unsigned char
-
 
 Board::Board(int w, int h) : width(w), height(h) {
     reset();
 }
 
-vector<byte> Board::serialize() {
-    vector<byte> outBuff;
+vector<uint8_t> Board::serialize() {
+    vector<uint8_t> outBuff;
 
     outBuff.emplace_back(width);
     outBuff.emplace_back(width >> 8);
@@ -23,13 +21,13 @@ vector<byte> Board::serialize() {
     outBuff.emplace_back(height >> 8);
 
     outBuff.reserve(width * height);
-    for (vector<byte> &col: board)
-        for (byte b: col)
+    for (vector<uint8_t> &col: board)
+        for (uint8_t b: col)
             outBuff.emplace_back(b);
     return outBuff;
 }
 
-void Board::deserialize(vector<byte> &data) {
+void Board::deserialize(vector<uint8_t> &data) {
     if (data.size() < 4) {
         cerr << "To few bytes in data stream! Expected at least 4 but recived" << data.size() << endl;
         return;
@@ -59,7 +57,7 @@ void Board::debug() {
 }
 
 void Board::reset() {
-    board = vector < vector < byte >> (width, vector<byte>(height, 0));;
+    board = vector < vector < uint8_t >> (width, vector<uint8_t>(height, 0));;
 }
 
 void Board::update() {
