@@ -4,7 +4,9 @@
 #include "game/io/Window.h"
 #include "game/Tetris.h"
 
-#include "networking/Networking.h"
+#include "../examples/Networking.h"
+
+#include "networking/BinarySerialize.h"
 
 /* Sets constants */
 #define WIDTH 800
@@ -64,8 +66,24 @@ struct CmdLineArg {
 map<string, CmdLineArg> commandLineArguments;
 
 int32_t main(int argc, char *argv[]) {
-    testNetworking();
-    return 0;
+
+//    std::stringstream ss;
+//    vector<int> v = {1, 2, -1};
+//    vector<short> w = {1};
+//    ss << binw(v) << binw(w);
+//
+//    v.clear();
+//    w.clear();
+//
+//    ss >> binr(v) >> binr(w);
+//
+//    std::cout << v.size() << " " << v[0] << " " << v[1] << " " << v[2] << std::endl;
+//
+//    string s = ss.str();
+//    for(char c : s){
+//        std::cout << (int)c << std::endl;
+//    }
+//    testNetworking();
 
     commandLineArguments["-debug"] = CmdLineArg(0, debug);
     commandLineArguments["-nogui"] = CmdLineArg(1, noGui);

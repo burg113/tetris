@@ -9,12 +9,20 @@ add_executable(tetris
         src/game/io/KeyboardAdapter.cpp
         src/game/Tetris.cpp
         src/game/Board.cpp
-        src/networking/Networking.cpp
-        )
+        examples/Networking.cpp
+        src/networking/BinarySerialize.cpp src/networking/SocketWrapper.cpp src/networking/Server.cpp)
 
 include_directories(
         lib/asio/asio/include
 )
+
+include (TestBigEndian)
+TEST_BIG_ENDIAN(IS_BIG_ENDIAN)
+if(IS_BIG_ENDIAN)
+    add_compile_definitions(IS_BIG_ENDIAN)
+else()
+    add_compile_definitions(IS_LITTLE_ENDIAN)
+endif()
 
 if(MINGW)
     target_link_libraries(tetris ws2_32)

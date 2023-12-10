@@ -5,10 +5,8 @@
 #ifndef TETRIS_NETWORKING_H
 #define TETRIS_NETWORKING_H
 
-
-class Networking {
-
-};
+#include "../src/networking/Server.h"
+#include "../src/networking/BinarySerialize.h"
 
 
 void testNetworking();
