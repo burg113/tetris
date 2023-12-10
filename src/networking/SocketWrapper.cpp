@@ -8,13 +8,25 @@
 
 int SocketWrapper::numSessions = 0;
 
-SocketWrapper::SocketWrapper(asio::io_service &ioService, SocketReadCallback callback)
-        : socket(ioService), id(numSessions++), callback(std::move(callback)) {
+SocketWrapper::SocketWrapper(asio::io_service &ioService)
+        : socket(ioService), id(numSessions++) {
     firstRead = true;
-    header = 0;
+    curHeader = 0;
     lenlen = 0;
     len = 0;
     alive = true;
+}
+
+void SocketWrapper::addReadCallback(const SocketReadCallback &callback) {
+    readCallbacks.push_back(callback);
+}
+
+void SocketWrapper::addKillCallback(const SocketKillCallback &callback) {
+    killCallbacks.push_back(callback);
+}
+
+void SocketWrapper::connectToIp(const asio::ip::address &ip, short port) {
+    socket.connect(tcp::endpoint(ip, port));
 }
 
 void SocketWrapper::startListening() {
@@ -67,6 +79,9 @@ void SocketWrapper::kill() {
         alive = false;
         socket.shutdown(asio::socket_base::shutdown_type::shutdown_both);
         socket.close();
+        for (const SocketKillCallback &callback : killCallbacks) {
+            callback(this);
+        }
     }
 }
 
@@ -76,12 +91,12 @@ void SocketWrapper::handleRead(const asio::error_code &err, size_t numBytes) {
         kill();
         return;
     }
-//    std::cout << "Socked " << id << " received " << std::string(buf, buf + numBytes) << std::endl;
+//    std::cout << "Socked " << id << " received " << (int)buf[0] << std::endl;
     uint32_t oldLen = data.size();
     if (firstRead) {
         firstRead = false;
-        header = static_cast<uint8_t>(buf[0]);
-        uint8_t lenInfo = header & 3;
+        curHeader = static_cast<uint8_t>(buf[0]);
+        uint8_t lenInfo = curHeader & 3;
         if(lenInfo == 3) lenlen = 4;
         else if(lenInfo == 2) lenlen = 1;
         else {
@@ -92,7 +107,7 @@ void SocketWrapper::handleRead(const asio::error_code &err, size_t numBytes) {
     }
     else data += std::string(buf, buf + numBytes);
     if (oldLen < lenlen && lenlen <= data.size()) {
-        for (int i = lenlen-1; i >= 0; i--) {
+        for (int i = 0; i < lenlen; i++) {
             len *= 256;
             len += static_cast<uint8_t>(data[i]);
         }
@@ -104,10 +119,12 @@ void SocketWrapper::handleRead(const asio::error_code &err, size_t numBytes) {
         }
         if (data.size() >= len) {
             // handle message
-            callback(this, header >> 2, data.substr(lenlen));
+            for(const SocketReadCallback &callback : readCallbacks) {
+                callback(this, curHeader >> 2, data.substr(lenlen));
+            }
             // reset state
             firstRead = true;
-            header = 0;
+            curHeader = 0;
             lenlen = 0;
             len = 0;
             data.clear();

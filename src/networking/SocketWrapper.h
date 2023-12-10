@@ -13,14 +13,22 @@ using asio::ip::tcp;
 
 class SocketWrapper;
 
-using SocketReadCallback = std::function<void(SocketWrapper*, uint8_t, std::string)>;
+using SocketConnectCallback = std::function<void(SocketWrapper*)>;
+using SocketReadCallback = std::function<void(SocketWrapper*, uint8_t, const std::string&)>;
+using SocketKillCallback = std::function<void(SocketWrapper*)>;
 
 constexpr int BUFFER_SIZE = 1;
 
 class SocketWrapper {
 public:
 
-    SocketWrapper(asio::io_service &ioService, SocketReadCallback callback);
+    explicit SocketWrapper(asio::io_service &ioService);
+
+    void addReadCallback(const SocketReadCallback& callback);
+
+    void addKillCallback(const SocketKillCallback& callback);
+
+    void connectToIp(const asio::ip::address& ip, short port);
 
     void startListening();
 
@@ -42,14 +50,15 @@ private:
     tcp::socket socket;
     char buf[BUFFER_SIZE] = {};
     bool firstRead;
-    uint8_t header;
+    uint8_t curHeader;
     int lenlen;
     uint32_t len;
     std::string data;
     int id;
     bool alive;
 
-    SocketReadCallback callback;
+    std::vector<SocketReadCallback> readCallbacks;
+    std::vector<SocketKillCallback> killCallbacks;
 
     void handleRead(const asio::error_code &err, size_t numBytes);
     void doReadSome();

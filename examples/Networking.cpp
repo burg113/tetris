@@ -3,71 +3,9 @@
 //
 
 #include "Networking.h"
-//#include <asio.hpp>
-//#include <iostream>
-//
-//using asio::ip::tcp;
-//
-//constexpr int BUFFER_SIZE = 10;
-//
-//int numSessions = 0;
-//
-//struct Session{
-//
-//    Session(asio::io_service &io_service): socket(io_service), id(numSessions++) {}
-//
-//    void start() {
-//        std::cout << "New session: " << id << std::endl;
-//        socket.async_read_some(asio::buffer(data, BUFFER_SIZE), [this](const asio::error_code &e, size_t nb) { this->handle_read(e, nb); });
-//    }
-//
-//    void handle_read(const asio::error_code &err, size_t numBytes) {
-//        if(!err) {
-//            std::string s(data, data + numBytes);
-//            std::cout << "Session " << id << " received input: " << s << std::endl;
-//            socket.async_read_some(asio::buffer(data, BUFFER_SIZE),[this](const asio::error_code &e, size_t nb) { this->handle_read(e, nb); });
-//        }
-//        else {
-//            std::cout << "Session " << id << " received error " << err.value() << ": " << err.message() << std::endl;
-//            delete this;
-//        }
-//    }
-//
-//    tcp::socket socket;
-//    char data[BUFFER_SIZE];
-//    int id;
-//};
-//
-//struct Server{
-//
-//    Server(asio::io_service &io_service, short port)
-//        :   io_service(io_service),
-//            acceptor(tcp::acceptor(io_service, tcp::endpoint(tcp::v4(), port))) {
-//
-//        Session* newSession = new Session(io_service);
-//        acceptor.async_accept(newSession->socket, [this, newSession](const asio::error_code& e){this->handle_accept(newSession, e);});
-//    }
-//
-//    void handle_accept(Session* newSession, const asio::error_code& err) {
-//        if (!err) {
-//            newSession->start();
-//            newSession = new Session(io_service);
-//            acceptor.async_accept(newSession->socket, [this, newSession](const asio::error_code& e){this->handle_accept(newSession, e);});
-//        }
-//        else {
-//            delete newSession;
-//        }
-//    }
-//
-//    asio::io_service &io_service;
-//    tcp::acceptor acceptor;
-//};
+#include <thread>
 
-void onConnect(SocketWrapper* socket) {
-    std::cout << "Socket " << socket->getId() << " connected!" << std::endl;
-}
-
-void onRead(SocketWrapper* socket, uint8_t header, std::string data) {
+void onReadServer(SocketWrapper* socket, uint8_t header, const std::string &data) {
     std::cout << "Socket " << socket->getId() << " received input." << std::endl;
     std::cout << "Header: " << (int)header << std::endl;
     std::cout << "Data: " << data << std::endl;
@@ -82,15 +20,49 @@ void onRead(SocketWrapper* socket, uint8_t header, std::string data) {
     socket->kill();
 }
 
+void onKillServer(SocketWrapper* socket) {
+    std::cout << "Socket " << socket->getId() << " was killed." << std::endl;
+}
+
+void onConnectServer(SocketWrapper* socket) {
+    std::cout << "Socket " << socket->getId() << " connected!" << std::endl;
+    socket->addReadCallback(onReadServer);
+    socket->addKillCallback(onKillServer);
+}
+
+void onReadClient(SocketWrapper* socket, uint8_t header, const std::string &data) {
+    int sum = 0;
+    std::stringstream strstr(data);
+    strstr >> binr(sum);
+    std::cout << "Client received data: " << sum << std::endl;
+}
+
+void startClient() {
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    asio::io_service ioService;
+    SocketWrapper clientSocket(ioService);
+    clientSocket.addReadCallback(onReadClient);
+    clientSocket.connectToIp(asio::ip::address::from_string("127.0.0.1"), 13);
+    std::vector<short> vec;
+    for(short s = 0; s < 200; s++) vec.push_back(s);
+    std::stringstream strstr;
+    strstr << binw(vec);
+    clientSocket.send(0, strstr.str());
+    clientSocket.startListening();
+    ioService.run();
+}
+
 void testNetworking(){
     std::cerr << "Test networking" << std::endl;
+    std::thread clientThread(startClient);
     try {
-        asio::io_service io_service;
+        asio::io_service ioService;
 
-        Server s(io_service, 13, onConnect, onRead);
+        Server s(ioService, 13);
+        s.addConnectCallback(onConnectServer);
         s.startAccepting();
 
-        io_service.run();
+        ioService.run();
     }
     catch (std::exception &e) {
         std::cerr << "Exception: " << e.what() << std::endl;

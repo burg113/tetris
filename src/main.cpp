@@ -66,7 +66,8 @@ struct CmdLineArg {
 map<string, CmdLineArg> commandLineArguments;
 
 int32_t main(int argc, char *argv[]) {
-    //testNetworking();
+//    testNetworking();
+//    return 0;
 
     commandLineArguments["-debug"] = CmdLineArg(0, debug);
     commandLineArguments["-nogui"] = CmdLineArg(1, noGui);

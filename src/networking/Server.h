@@ -11,7 +11,9 @@ using SocketConnectCallback = std::function<void(SocketWrapper*)>;
 
 class Server {
 public:
-    Server(asio::io_service &ioService, short port, SocketConnectCallback socketConnectCallback, SocketReadCallback socketReadCallback);
+    Server(asio::io_service &ioService, short port);
+
+    void addConnectCallback(const SocketConnectCallback &callback);
 
     void startAccepting();
 
@@ -20,8 +22,7 @@ private:
     tcp::acceptor acceptor;
     std::vector<SocketWrapper*> sockets;
 
-    SocketConnectCallback socketConnectCallback;
-    SocketReadCallback socketReadCallback;
+    std::vector<SocketConnectCallback> connectCallbacks;
 
     void handleAccept(SocketWrapper* newSocket, const asio::error_code& err);
 };
