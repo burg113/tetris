@@ -10,7 +10,7 @@
 
 /* Sets constants */
 #define WIDTH 800
-#define HEIGHT 600
+#define HEIGHT 1000
 #define DELAY 3000
 
 using namespace std;
@@ -66,24 +66,7 @@ struct CmdLineArg {
 map<string, CmdLineArg> commandLineArguments;
 
 int32_t main(int argc, char *argv[]) {
-
-//    std::stringstream ss;
-//    vector<int> v = {1, 2, -1};
-//    vector<short> w = {1};
-//    ss << binw(v) << binw(w);
-//
-//    v.clear();
-//    w.clear();
-//
-//    ss >> binr(v) >> binr(w);
-//
-//    std::cout << v.size() << " " << v[0] << " " << v[1] << " " << v[2] << std::endl;
-//
-//    string s = ss.str();
-//    for(char c : s){
-//        std::cout << (int)c << std::endl;
-//    }
-//    testNetworking();
+    //testNetworking();
 
     commandLineArguments["-debug"] = CmdLineArg(0, debug);
     commandLineArguments["-nogui"] = CmdLineArg(1, noGui);
@@ -111,7 +94,7 @@ int32_t main(int argc, char *argv[]) {
 
     if (dedicatedServer) {
         if (openWindow) {
-            Window window;
+            Window window(WIDTH,HEIGHT);
         }
         // todo: implement server
 
@@ -122,7 +105,7 @@ int32_t main(int argc, char *argv[]) {
             return 1;
         }
         if (openWindow) {
-            Window window;
+            Window window(WIDTH,HEIGHT);
             if (!window.valid) {
                 cerr << "failed to create window! exiting" << endl;
                 return 1;
