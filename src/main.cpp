@@ -3,9 +3,9 @@
 #include <SDL.h>
 #include "game/io/Window.h"
 #include "game/Tetris.h"
+#include "game/io/input/SDLInputAdapter.h"
 
 #include "../examples/Networking.h"
-
 #include "networking/BinarySerialize.h"
 
 /* Sets constants */
@@ -111,7 +111,9 @@ int32_t main(int argc, char *argv[]) {
                 cerr << "failed to create window! exiting" << endl;
                 return 1;
             }
-            Tetris tetris(&window);
+
+            InputAdapter *inputAdapter = SDLInputAdapter::get();
+            Tetris tetris(&window,inputAdapter);
             tetris.play();
         }
     }

@@ -9,7 +9,7 @@
 #include "../Tetris.h"
 #include "Board.h"
 #include "../utils/Vec2.h"
-#include "../io/KeyboardAdapter.h"
+#include "../io/input/InputAdapter.h"
 
 
 class Game : public State {
@@ -52,6 +52,7 @@ class Game : public State {
     Piece oPiece = Piece({Vec2(0, 0), Vec2(1, 0), Vec2(0, -1), Vec2(1, -1)}, 2, {215, 220, 0, 255});
 
     Tetris *tetris;
+    InputAdapter *inputAdapter;
 
 
     Board board;
@@ -84,7 +85,7 @@ class Game : public State {
     Piece piece;
 
 public:
-    explicit Game(Tetris *tetris);
+    explicit Game(Tetris *tetris,InputAdapter *inputAdapter);
 
     bool checkOffset(Vec2 posOffset);
 

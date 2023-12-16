@@ -6,8 +6,8 @@
 
 #include <utility>
 
-Game::Game(Tetris *tetris) : tetris(tetris), board(0, 0), piece(iPiece) {
-    KeyboardAdapter::get()->registerCallback([this](bool b, int key) { handleInputCallback(b, key); });
+Game::Game(Tetris *tetris, InputAdapter *inputAdapter) : tetris(tetris),inputAdapter(inputAdapter), board(0, 0), piece(iPiece) {
+    inputAdapter->registerCallback([this](bool b, int key) { handleInputCallback(b, key); });
     reset();
 }
 
@@ -38,7 +38,7 @@ void Game::update() {
         if (tryRotate(1)) inpRr = -holdFrameRotationCooldown;
     }
 
-    if (KeyboardAdapter::get()->isDown(KEY_FAST_FALL)) {
+    if (inputAdapter->isDown(KEY_FAST_FALL)) {
         framesToFall -= fastFallExtraSpeed;
     }
 
@@ -84,21 +84,23 @@ void Game::lockPiece() {
 
 
 void Game::handleInput() {
-    bool l = KeyboardAdapter::get()->isDown(KEY_LEFT);
-    bool r = KeyboardAdapter::get()->isDown(KEY_RIGHT);
+    bool l = inputAdapter->isDown(KEY_LEFT);
+    bool r = inputAdapter->isDown(KEY_RIGHT);
     if (l && !r) inpL++, inpR = -1;
     else if (r && !l) inpL = -1, inpR++;
     else inpL = inpR = -1;
 
-    bool rl = KeyboardAdapter::get()->isDown(KEY_ROTATE_LEFT);
-    bool rr = KeyboardAdapter::get()->isDown(KEY_ROTATE_RIGHT);
+    bool rl = inputAdapter->isDown(KEY_ROTATE_LEFT);
+    bool rr = inputAdapter->isDown(KEY_ROTATE_RIGHT);
     if (rl && !rr) inpRl++, inpRr = -1;
     else if (rr && !rl) inpRl = -1, inpRr++;
     else inpRl = inpRr = -1;
 }
 
 void Game::handleInputCallback(bool pressed, int key) {
-    if (pressed && key == KEY_INSTA_DROP) instaDrop = true;
+    if (pressed && key == KEY_INSTA_DROP) {
+        instaDrop = true;
+    }
 }
 
 void Game::render() {

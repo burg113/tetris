@@ -8,7 +8,7 @@
 #include <stack>
 #include <memory>
 #include "io/Window.h"
-#include "io/KeyboardAdapter.h"
+#include "io/input/InputAdapter.h"
 #include "state/Board.h"
 #include "state/State.h"
 
@@ -21,14 +21,14 @@ class Tetris {
     int FRAMERATE = 60;
 public:
     Window *window;
-    KeyboardAdapter *keyboard;
+    InputAdapter *inputAdapter;
 
     std::vector<std::unique_ptr<State>> stateInstances;
 
     std::stack<StateEnum> state;
 
 
-    Tetris(Window *window);
+    Tetris(Window *window, InputAdapter *inputAdapter);
 
     void popStateStack();
     void gotoState(StateEnum s);

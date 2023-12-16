@@ -9,7 +9,10 @@ add_executable(tetris
         src/game/Tetris.cpp
         src/game/state/Board.cpp
         src/game/io/Window.cpp
-        src/game/io/KeyboardAdapter.cpp
+        src/game/io/input/InputAdapter.cpp
+        src/game/io/input/VirtualInputAdapter.cpp
+        src/game/io/input/SDLInputAdapter.cpp
+
         src/game/state/Menu.cpp
         src/game/state/MainMenu.cpp
         src/game/state/Game.cpp

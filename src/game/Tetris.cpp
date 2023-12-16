@@ -16,7 +16,7 @@ void Tetris::play() {
     auto t1 = std::chrono::high_resolution_clock::now();
     int frameCount = 0;
 
-    while (!keyboard->quit) {
+    while (!inputAdapter->quit()) {
         int microTillNextFrame = (int) std::chrono::duration_cast<std::chrono::microseconds>(
                 t1 - std::chrono::high_resolution_clock::now()).count() + (int) 1e6 / FRAMERATE;
         if (microTillNextFrame > 0)
@@ -25,15 +25,15 @@ void Tetris::play() {
         t1 = std::chrono::high_resolution_clock::now();
         frameCount++;
 
-        keyboard->update();
+        // todo: update input adapter!
 
         update();
 
         window->render();
 
-        std::cerr << "Frame took: " << (int) std::chrono::duration_cast<std::chrono::milliseconds>(
+        /*std::cerr << "Frame took: " << (int) std::chrono::duration_cast<std::chrono::milliseconds>(
                 std::chrono::high_resolution_clock::now() - t1).count() << " ms"<<std::endl;
-
+        */
     }
 
 }
@@ -51,15 +51,14 @@ void Tetris::update() {
 void Tetris::reset() {
     stateInstances = std::vector<std::unique_ptr<State>>(STATE_COUNT);
     stateInstances[StateEnum::MAIN_MENU] = std::unique_ptr<State>(new MainMenu(this));
-    stateInstances[StateEnum::GAME] = std::unique_ptr<State>(new Game(this));
+    stateInstances[StateEnum::GAME] = std::unique_ptr<State>(new Game(this,inputAdapter));
     stateInstances[StateEnum::MENU] = std::unique_ptr<State>(new Menu(this));
 
     state = std::stack<StateEnum>();
     state.emplace(MAIN_MENU);
 }
 
-Tetris::Tetris(Window *window) : window(window) {
-    keyboard = KeyboardAdapter::get();
+Tetris::Tetris(Window *window, InputAdapter *inputAdapter) : window(window),inputAdapter(inputAdapter) {
     reset();
 }
 
