@@ -7,7 +7,7 @@
 #include <iostream>
 #include "Tetris.h"
 
-#include "state/State.h"
+#include "state/ApplicationState.h"
 #include "state/MainMenu.h"
 #include "state/Game.h"
 #include "state/Menu.h"
@@ -40,7 +40,7 @@ void Tetris::play() {
 
 void Tetris::update() {
     if (state.empty()) {
-        std::cerr << "Fatal Error! Game has lost state. Restarting.";
+        std::cerr << "Fatal Error! GameLogic has lost state. Restarting.";
         reset();
         return;
     }
@@ -49,10 +49,10 @@ void Tetris::update() {
 
 
 void Tetris::reset() {
-    stateInstances = std::vector<std::unique_ptr<State>>(STATE_COUNT);
-    stateInstances[StateEnum::MAIN_MENU] = std::unique_ptr<State>(new MainMenu(this));
-    stateInstances[StateEnum::GAME] = std::unique_ptr<State>(new Game(this,inputAdapter));
-    stateInstances[StateEnum::MENU] = std::unique_ptr<State>(new Menu(this));
+    stateInstances = std::vector<std::unique_ptr<ApplicationState>>(STATE_COUNT);
+    stateInstances[StateEnum::MAIN_MENU] = std::unique_ptr<ApplicationState>(new MainMenu(this));
+    stateInstances[StateEnum::GAME] = std::unique_ptr<ApplicationState>(new Game(this));
+    stateInstances[StateEnum::MENU] = std::unique_ptr<ApplicationState>(new Menu(this));
 
     state = std::stack<StateEnum>();
     state.emplace(MAIN_MENU);
@@ -68,7 +68,7 @@ void Tetris::gotoState(StateEnum s) {
 
 void Tetris::popStateStack() {
     if (state.empty()) {
-        std::cerr << "Cannot pop state. State stack is already empty!"<<std::endl;
+        std::cerr << "Cannot pop state. ApplicationState stack is already empty!"<<std::endl;
         return;
     }
     state.pop();

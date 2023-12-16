@@ -16,7 +16,7 @@ public:
     SDLInputAdapter(SDLInputAdapter const&) = delete;
     void operator=(SDLInputAdapter const&)  = delete;
 
-    static InputAdapter* get(){
+    static SDLInputAdapter* get(){
         static SDLInputAdapter inputAdapter;
         return &inputAdapter;
     }

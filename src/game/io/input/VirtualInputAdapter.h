@@ -10,6 +10,8 @@
 class VirtualInputAdapter : public InputAdapter {
 
 public:
+    explicit VirtualInputAdapter(int size);
+
     void update(int key,bool state) override;
 
 };

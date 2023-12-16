@@ -10,7 +10,7 @@
 #include "io/Window.h"
 #include "io/input/InputAdapter.h"
 #include "state/Board.h"
-#include "state/State.h"
+#include "state/ApplicationState.h"
 
 constexpr int STATE_COUNT = 3;
 enum StateEnum {
@@ -23,7 +23,7 @@ public:
     Window *window;
     InputAdapter *inputAdapter;
 
-    std::vector<std::unique_ptr<State>> stateInstances;
+    std::vector<std::unique_ptr<ApplicationState>> stateInstances;
 
     std::stack<StateEnum> state;
 

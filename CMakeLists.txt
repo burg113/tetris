@@ -15,7 +15,9 @@ add_executable(tetris
 
         src/game/state/Menu.cpp
         src/game/state/MainMenu.cpp
+        src/game/GameLogic.cpp
         src/game/state/Game.cpp
+
         src/game/utils/Vec2.cpp
         src/game/Tetris.cpp
 

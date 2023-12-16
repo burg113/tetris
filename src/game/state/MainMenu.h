@@ -5,10 +5,10 @@
 #ifndef TETRIS_MAINMENU_H
 #define TETRIS_MAINMENU_H
 
-#include "State.h"
+#include "ApplicationState.h"
 #include "../Tetris.h"
 
-class MainMenu : public State {
+class MainMenu : public ApplicationState {
     Tetris *tetris;
 
     void reset();

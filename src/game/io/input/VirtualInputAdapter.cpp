@@ -8,3 +8,7 @@
 void VirtualInputAdapter::update(int key, bool state) {
     InputAdapter::update(key, state);
 }
+
+VirtualInputAdapter::VirtualInputAdapter(int size) : InputAdapter(size) {
+
+}
