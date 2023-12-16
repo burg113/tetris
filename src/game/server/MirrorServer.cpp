@@ -69,7 +69,6 @@ void MirrorServer::run() {
 void MirrorServer::render() {
     Board *board = &game.board;
 
-
     float fill = .9;
     int size = std::min(window->width / board->width, window->height / board->height) * fill;
 
@@ -79,10 +78,10 @@ void MirrorServer::render() {
         for (int x = 0; x < board->width; x++) {
             SDL_Color col;
 
-            if ((*board)[x][y] == 0)
-                col = {(unsigned char) (x * 10 + 50), (unsigned char) (y * 5 + 50), 0, 255};
+            if ((*board)[x][y] == BOARD_INDEX_EMTPY)
+                col = {40,40,40,255};
             else
-                col = {200, 200, 200, 255};
+                col = {120, 120, 120, 255};
 
             window->draw(upperCorner.x + size * x, upperCorner.y + size * y, size, size, col);
         }

@@ -44,11 +44,13 @@ void Game::render() {
         for (int x = 0; x < board->width; x++) {
             SDL_Color col;
 
-            if ((*board)[x][y] == 0)
-                col = {(unsigned char) (x * 10 + 50), (unsigned char) (y * 5 + 50), 0, 255};
-            else
-                col = {200, 200, 200, 255};
+            if ((*board)[x][y] == BOARD_INDEX_EMTPY)
+                col = {10,10,10,255};
+            else {
+                col = colors[(*board)[x][y]];
+                col.r *= .8; col.g *=.8, col.b*=.8;
 
+            }
             window->draw(upperCorner.x + size * x, upperCorner.y + size * y, size, size, col);
         }
     }

@@ -10,6 +10,8 @@
 #ifndef TETRIS_BOARD_H
 #define TETRIS_BOARD_H
 
+constexpr unsigned char BOARD_INDEX_EMTPY = 255;
+
 class Board {
     std::vector<std::vector<uint8_t>> board;   // 0 if nothing in spot; otherwise > 0
     uint8_t voidO;

@@ -57,21 +57,22 @@ void Board::debug() {
 }
 
 void Board::reset() {
-    board = vector < vector < uint8_t >> (width, vector<uint8_t>(height, 0));;
+    board = vector < vector < uint8_t >> (width, vector<uint8_t>(height, BOARD_INDEX_EMTPY));
 }
 
 void Board::update() {
     for (int y = 0; y < height; y++) {
         int clear = true;
         for (int x = 0; x < width; x++) {
-            if (board[x][y] == 0) clear = false;
+            if (board[x][y] == BOARD_INDEX_EMTPY) clear = false;
         }
         if (clear) {
             for (int x = 0; x < width; x++) {
                 for (int tmpY = y; tmpY > 0; tmpY--) {
                     board[x][tmpY] = board[x][tmpY -1];
                 }
-                board[x][0] = 0;
+
+                board[x][0] = BOARD_INDEX_EMTPY;
             }
         }
     }

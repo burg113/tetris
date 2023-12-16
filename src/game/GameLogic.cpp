@@ -75,7 +75,7 @@ void GameLogic::lockPiece() {
 
     for (Vec2 v: piece.tiles) {
         Vec2 p = v.rot(rotation) + position;
-        board[p] = 1;
+        board[p] = piece.colorId;
     }
 
     board.update();
@@ -126,7 +126,7 @@ bool GameLogic::checkPos(Vec2 pos) {
     if (pos.x < 0 || pos.y < 0 || pos.x >= board.width || pos.y >= board.height)
         return false;
 
-    return (board[pos] == 0);
+    return (board[pos] == BOARD_INDEX_EMTPY);
 }
 
 GameLogic::Piece GameLogic::getNextTetromino() {
