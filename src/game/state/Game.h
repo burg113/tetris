@@ -83,20 +83,23 @@ class Game : public State {
     Vec2 position;
     int rotation = 0;
     Piece piece;
+private:
+    void reset();
 
 public:
+
     explicit Game(Tetris *tetris,InputAdapter *inputAdapter);
 
     bool checkOffset(Vec2 posOffset);
 
     bool checkPos(Vec2 pos, Piece &piece, int rotation);
 
+
     bool checkPos(Vec2 pos);
 
-
     void update() override;
-
     void handleInput();
+
     void handleInputCallback(bool b, int input);
 
     void render();
@@ -106,8 +109,6 @@ public:
     bool tryRotate(bool clockwise);
 
     Piece getNextTetromino();
-
-    void reset() override;
 
     void resetPiece();
 };

@@ -169,7 +169,7 @@ bool Game::tryRotate(bool clockwise) {
             if (checkPos(position + rotOffset, piece, rotation + 1)) {
                 position += rotOffset;
                 rotation++;
-                break;
+                return true;
             }
         }
     } else {
@@ -178,10 +178,11 @@ bool Game::tryRotate(bool clockwise) {
             if (checkPos(position + rotOffset, piece, rotation + 1)) {
                 position += rotOffset;
                 rotation--;
-                break;
+                return true;
             }
         }
     }
+    return false;
 }
 
 Game::Piece::Piece(std::vector<Vec2> tiles, int type, SDL_Color col) : tiles(std::move(tiles)), type(type), col(col) {}

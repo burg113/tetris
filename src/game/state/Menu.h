@@ -8,14 +8,15 @@
 #include "State.h"
 #include "../Tetris.h"
 
-class Menu : public State{
-    Tetris* tetris;
+class Menu : public State {
+    Tetris *tetris;
+
+    void reset();
+
 public:
-    explicit Menu(Tetris* tetris);
+    explicit Menu(Tetris *tetris);
 
     void update() override;
-    void reset() override;
-
 };
 
 

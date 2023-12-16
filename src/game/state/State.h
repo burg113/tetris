@@ -8,10 +8,7 @@
 
 class State {
 public:
-    virtual void reset() = 0;
-
     virtual void update() = 0;
-
 
     virtual ~State() = default;
 

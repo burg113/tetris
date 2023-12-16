@@ -9,12 +9,14 @@
 #include "../Tetris.h"
 
 class MainMenu : public State {
-    Tetris* tetris;
+    Tetris *tetris;
+
+    void reset();
+
 public:
-    explicit MainMenu(Tetris* tetris);
+    explicit MainMenu(Tetris *tetris);
 
     void update() override;
-    void reset() override;
 };
 
 
