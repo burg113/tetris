@@ -17,6 +17,7 @@ void onReadServer(SocketWrapper* socket, uint8_t header, const std::string &data
     std::stringstream out;
     out << binw(sum);
     socket->send(0,out.str());
+    std::cout << "Sent" << std::endl;
     socket->kill();
 }
 
@@ -48,6 +49,7 @@ void startClient() {
     std::stringstream strstr;
     strstr << binw(vec);
     clientSocket.send(0, strstr.str());
+    std::this_thread::sleep_for(std::chrono::milliseconds(10000));
     clientSocket.startListening();
     ioService.run();
 }
