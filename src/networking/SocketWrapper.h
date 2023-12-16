@@ -30,6 +30,9 @@ public:
 
     void connectToIp(const asio::ip::address& ip, short port);
 
+    // service = port
+    void connect(const std::string& host, const std::string &service);
+
     void startListening();
 
     void sendRaw(const std::string &str);

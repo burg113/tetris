@@ -20,7 +20,7 @@ using namespace std;
 bool dedicatedServer = false;
 bool openWindow = true;
 short debugLevel = -1;
-string ipAddress;
+string host, service;
 
 // save get int
 int getInt(const string &s) {
@@ -47,8 +47,12 @@ void server(const string &s) {
     dedicatedServer = true;
 }
 
-void ipOption(const string &s){
-    ipAddress = s;
+void hostOption(const string &s){
+    host = s;
+}
+
+void serviceOption(const string &s){
+    service = s;
 }
 
 struct CmdLineArg {
@@ -79,7 +83,9 @@ int32_t main(int argc, char *argv[]) {
     commandLineArguments["-debug"] = CmdLineArg(0, debug);
     commandLineArguments["-nogui"] = CmdLineArg(1, noGui);
     commandLineArguments["-server"] = CmdLineArg(10, server);
-    commandLineArguments["-ip"] = CmdLineArg(7, ipOption);
+    commandLineArguments["-host"] = CmdLineArg(7, hostOption);
+    commandLineArguments["-service"] = CmdLineArg(7, serviceOption);
+
 
     priority_queue<CmdLineArg> args;
 
@@ -135,7 +141,7 @@ int32_t main(int argc, char *argv[]) {
 
             asio::io_service ioService;
             SocketWrapper socket(ioService);
-            socket.connectToIp(asio::ip::address::from_string(ipAddress), 13);
+            socket.connect(host, service);
 
             InputAdapter *inputAdapter = SDLInputAdapter::get();
             Tetris tetris(&window, inputAdapter, &socket);

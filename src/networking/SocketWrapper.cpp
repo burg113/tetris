@@ -24,6 +24,12 @@ void SocketWrapper::connectToIp(const asio::ip::address &ip, short port) {
     socket.connect(tcp::endpoint(ip, port));
 }
 
+void SocketWrapper::connect(const std::string &host, const std::string &service) {
+    tcp::resolver resolver(ioService);
+    tcp::resolver::results_type endpoint = resolver.resolve(host, service);
+    socket.connect(endpoint->endpoint());
+}
+
 void SocketWrapper::startListening() {
     std::cout << "Socket " << id << " started listening." << std::endl;
     doReadSome();
