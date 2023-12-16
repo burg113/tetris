@@ -7,10 +7,11 @@
 #include "game/io/input/SDLInputAdapter.h"
 #include <thread>
 
-MirrorServer::MirrorServer(Server *server, Window *window) : server(server), window(window), inputAdapter(GameLogic::Key::SIZE){
-    server->addConnectCallback([this](SocketWrapper *socket){
+MirrorServer::MirrorServer(Server *server, Window *window) : server(server), window(window),
+                                                             inputAdapter(GameLogic::Key::SIZE) {
+    server->addConnectCallback([this](SocketWrapper *socket) {
         updateGame = true;
-        socket->addReadCallback([this](SocketWrapper *socket, const std::string &data){
+        socket->addReadCallback([this](SocketWrapper *socket, const std::string &data) {
             handleSocketRead(socket, data);
         });
     });
@@ -21,11 +22,19 @@ void MirrorServer::handleSocketRead(SocketWrapper *socket, const std::string &da
     std::stringstream strstr(data);
     int key;
     bool set;
-    strstr >> binr(key) >> binr(set);
-    inputAdapter.update(key, set);
+    unsigned char info;
+    strstr >> binr(info);
+    if (info == 0) {
+        strstr >> binr(key) >> binr(set);
+        inputAdapter.update(key, set);
+    }
+    if (info == 1) {
+        game.update();
+        render();
+    }
 }
 
-void MirrorServer::run(){
+void MirrorServer::run() {
     auto t1 = std::chrono::high_resolution_clock::now();
     int frameCount = 0;
 
@@ -34,20 +43,20 @@ void MirrorServer::run(){
 
     while (!sdlAdapter->quit()) {
         while (std::chrono::duration_cast<std::chrono::microseconds>(
-                t1 - std::chrono::high_resolution_clock::now()).count() + (int) 1e6 / FRAMERATE> 0)
+                t1 - std::chrono::high_resolution_clock::now()).count() + (int) 1e6 / FRAMERATE > 0)
             continue;
 
         std::cerr << "Frame took: " << (int) std::chrono::duration_cast<std::chrono::milliseconds>(
-                std::chrono::high_resolution_clock::now() - t1).count() << " ms"<<std::endl;
+                std::chrono::high_resolution_clock::now() - t1).count() << " ms" << std::endl;
 
         t1 = std::chrono::high_resolution_clock::now();
         frameCount++;
 
         server->getIoService().poll();
 
-        if(updateGame) {
+        /*if (updateGame) {
             game.update();
-        }
+        }*/
         render();
 
         sdlAdapter->update();

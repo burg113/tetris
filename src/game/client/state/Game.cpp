@@ -7,7 +7,6 @@
 #include "networking/BinarySerialize.h"
 
 Game::Game(Tetris *tetris) : tetris(tetris),virtualAdapter((int) GameLogic::Key::SIZE), gameLogic() {
-
     gameLogic.setInputAdapter(&virtualAdapter);
     SDLInputAdapter::get() -> registerCallback([this](bool set, int key) {
         if (KEY_CONVERSION.count(key)) {
@@ -16,20 +15,24 @@ Game::Game(Tetris *tetris) : tetris(tetris),virtualAdapter((int) GameLogic::Key:
     });
     virtualAdapter.registerCallback([this](bool set, int key){
         std::stringstream strstr;
-        strstr << binw(key) << binw(set);
+        strstr << binw((unsigned char) 0) << binw(key) << binw(set);
         this->tetris->socket->send(strstr.str());
     });
 }
 
 void Game::update() {
     SDLInputAdapter::get()->update();
+
+    std::stringstream strstr;
+    strstr << binw((unsigned char) 1) << gameLogic.frameCount;
+    this->tetris->socket->send(strstr.str());
+
     gameLogic.update();
     render();
 }
 
 void Game::render() {
     Board *board = &gameLogic.board;
-
 
     float fill = .9;
     Window *window = tetris->window;
