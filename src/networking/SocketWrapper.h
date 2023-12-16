@@ -17,7 +17,7 @@ using SocketConnectCallback = std::function<void(SocketWrapper*)>;
 using SocketReadCallback = std::function<void(SocketWrapper*, const std::string&)>;
 using SocketKillCallback = std::function<void(SocketWrapper*)>;
 
-constexpr int BUFFER_SIZE = 1;
+constexpr int BUFFER_SIZE = 512;
 
 class SocketWrapper {
 public:

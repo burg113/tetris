@@ -62,7 +62,7 @@ void testNetworking(){
     try {
         asio::io_service ioService;
 
-        Server s(ioService, 13);
+        ServerHelper s(ioService, 13);
         s.addConnectCallback(onConnectServer);
         s.startAccepting();
 

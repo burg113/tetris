@@ -6,7 +6,7 @@
 #define TETRIS_MIRRORSERVER_H
 
 #include "game/GameLogic.h"
-#include "networking/server.h"
+#include "networking/ServerHelper.h"
 #include "game/io/input/VirtualInputAdapter.h"
 #include "game/io/Window.h"
 
@@ -26,7 +26,7 @@ class MirrorServer {
 
 public:
 
-    explicit MirrorServer(Server *server, Window *window);
+    explicit MirrorServer(ServerHelper *server, Window *window);
 
     void handleSocketRead(SocketWrapper *socket, const std::string &data);
 
@@ -34,7 +34,7 @@ public:
 
     void render();
 
-    Server *server;
+    ServerHelper *server;
     Window *window;
     VirtualInputAdapter inputAdapter;
     GameLogic game;

@@ -5,7 +5,7 @@
 #ifndef TETRIS_NETWORKING_H
 #define TETRIS_NETWORKING_H
 
-#include "../src/networking/Server.h"
+#include "../src/networking/ServerHelper.h"
 #include "../src/networking/BinarySerialize.h"
 
 

@@ -7,8 +7,8 @@
 #include "game/io/input/SDLInputAdapter.h"
 #include <thread>
 
-MirrorServer::MirrorServer(Server *server, Window *window) : server(server), window(window),
-                                                             inputAdapter(GameLogic::Key::SIZE) {
+MirrorServer::MirrorServer(ServerHelper *server, Window *window) : server(server), window(window),
+                                                                   inputAdapter(GameLogic::Key::SIZE) {
     server->addConnectCallback([this](SocketWrapper *socket) {
         updateGame = true;
         socket->addReadCallback([this](SocketWrapper *socket, const std::string &data) {

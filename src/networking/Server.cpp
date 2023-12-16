@@ -2,30 +2,30 @@
 // Created by lucas on 09.12.2023.
 //
 
-#include "Server.h"
+#include "ServerHelper.h"
 
 #include <utility>
 
-Server::Server(asio::io_service &ioService, short port) : ioService(ioService),
-                                                        acceptor(tcp::acceptor(ioService, tcp::endpoint(tcp::v4(), port))) {
+ServerHelper::ServerHelper(asio::io_service &ioService, short port) : ioService(ioService),
+                                                                      acceptor(tcp::acceptor(ioService, tcp::endpoint(tcp::v4(), port))) {
 
 }
 
-void Server::addConnectCallback(const SocketConnectCallback &callback) {
+void ServerHelper::addConnectCallback(const SocketConnectCallback &callback) {
     connectCallbacks.push_back(callback);
 }
 
-asio::io_service& Server::getIoService(){
+asio::io_service& ServerHelper::getIoService(){
     return ioService;
 }
 
-void Server::startAccepting() {
+void ServerHelper::startAccepting() {
     auto *newSocket = new SocketWrapper(ioService);
     sockets.push_back(newSocket);
     acceptor.async_accept(newSocket->getSocket(), [this, newSocket](const asio::error_code& e){this->handleAccept(newSocket, e);});
 }
 
-void Server::handleAccept(SocketWrapper *newSocket, const asio::error_code &err) {
+void ServerHelper::handleAccept(SocketWrapper *newSocket, const asio::error_code &err) {
     if (err) {
         std::cerr << "Socket acceptor received error " << err.value() << ": " << err.message() << std::endl;
         newSocket->kill();

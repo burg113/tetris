@@ -7,7 +7,7 @@
 
 #include "../examples/Networking.h"
 #include "networking/BinarySerialize.h"
-#include "networking/Server.h"
+#include "networking/ServerHelper.h"
 #include "game/server/MirrorServer.h"
 
 /* Sets constants */
@@ -120,7 +120,7 @@ int32_t main(int argc, char *argv[]) {
             }
 
             asio::io_service ioService;
-            Server server(ioService, 13);
+            ServerHelper server(ioService, 13);
 
             MirrorServer mirrorServer(&server, &window);
             mirrorServer.run();

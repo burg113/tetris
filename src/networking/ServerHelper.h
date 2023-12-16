@@ -2,16 +2,16 @@
 // Created by lucas on 09.12.2023.
 //
 
-#ifndef TETRIS_SERVER_H
-#define TETRIS_SERVER_H
+#ifndef TETRIS_SERVERHELPER_H
+#define TETRIS_SERVERHELPER_H
 
 #include "SocketWrapper.h"
 
 using SocketConnectCallback = std::function<void(SocketWrapper*)>;
 
-class Server {
+class ServerHelper {
 public:
-    Server(asio::io_service &ioService, short port);
+    ServerHelper(asio::io_service &ioService, short port);
 
     void addConnectCallback(const SocketConnectCallback &callback);
 
@@ -30,4 +30,4 @@ private:
 };
 
 
-#endif //TETRIS_SERVER_H
+#endif //TETRIS_SERVERHELPER_H
