@@ -7,8 +7,8 @@
 
 #include <stack>
 #include <memory>
-#include "io/Window.h"
-#include "io/input/InputAdapter.h"
+#include "../io/Window.h"
+#include "../io/input/InputAdapter.h"
 #include "state/Board.h"
 #include "state/ApplicationState.h"
 

@@ -2,7 +2,7 @@
 
 #include <SDL.h>
 #include "game/io/Window.h"
-#include "game/Tetris.h"
+#include "game/client/Tetris.h"
 #include "game/io/input/SDLInputAdapter.h"
 
 #include "../examples/Networking.h"

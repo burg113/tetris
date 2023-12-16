@@ -7,9 +7,9 @@
 
 #include "ApplicationState.h"
 #include "../Tetris.h"
-#include "../io/input/InputAdapter.h"
-#include "../GameLogic.h"
-#include "../io/input/VirtualInputAdapter.h"
+#include "game/io/input/InputAdapter.h"
+#include "game/GameLogic.h"
+#include "game/io/input/VirtualInputAdapter.h"
 
 class Game : public ApplicationState{
     GameLogic gameLogic;

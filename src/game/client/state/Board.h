@@ -5,7 +5,8 @@
 
 #include <vector>
 #include <iostream>
-#include "../utils/Vec2.h"
+#include "utils/Vec2.h"
+
 #ifndef TETRIS_BOARD_H
 #define TETRIS_BOARD_H
 

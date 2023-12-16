@@ -3,7 +3,7 @@
 //
 
 #include "Game.h"
-#include "../io/input/SDLInputAdapter.h"
+#include "game/io/input/SDLInputAdapter.h"
 
 Game::Game(Tetris *tetris) : tetris(tetris),virtualAdapter((int) GameLogic::Key::SIZE), gameLogic() {
 

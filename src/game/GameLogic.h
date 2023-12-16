@@ -5,9 +5,9 @@
 #ifndef TETRIS_GAMELOGIC_H
 #define TETRIS_GAMELOGIC_H
 
-#include "state/Board.h"
-#include "utils/Vec2.h"
 #include "io/input/InputAdapter.h"
+#include "client/state/Board.h"
+#include "../utils/Vec2.h"
 
 
 class GameLogic {

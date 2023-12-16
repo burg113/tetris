@@ -6,26 +6,27 @@ set(CMAKE_CXX_STANDARD 17)
 add_executable(tetris
         src/main.cpp
 
-        src/game/Tetris.cpp
-        src/game/state/Board.cpp
+        src/game/client/Tetris.cpp
+        src/game/client/state/Board.cpp
         src/game/io/Window.cpp
         src/game/io/input/InputAdapter.cpp
         src/game/io/input/VirtualInputAdapter.cpp
         src/game/io/input/SDLInputAdapter.cpp
 
-        src/game/state/Menu.cpp
-        src/game/state/MainMenu.cpp
+        src/game/client/state/Menu.cpp
+        src/game/client/state/MainMenu.cpp
         src/game/GameLogic.cpp
-        src/game/state/Game.cpp
+        src/game/client/state/Game.cpp
 
-        src/game/utils/Vec2.cpp
-        src/game/Tetris.cpp
+        src/utils/Vec2.cpp
+        src/game/client/Tetris.cpp
 
         examples/Networking.cpp
         src/networking/BinarySerialize.cpp src/networking/SocketWrapper.cpp src/networking/Server.cpp)
 
 include_directories(
         lib/asio/asio/include
+        src
 )
 
 include (TestBigEndian)
