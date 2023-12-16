@@ -18,7 +18,7 @@ public:
     int width, height;
 
     bool valid = false;
-    Window(int width,int height);
+    Window(int width,int height, const std::string &title);
 
     void draw(int x, int y, int dx, int dy, SDL_Color);
 

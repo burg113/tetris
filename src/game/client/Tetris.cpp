@@ -17,10 +17,12 @@ void Tetris::play() {
     int frameCount = 0;
 
     while (!inputAdapter->quit()) {
-        int microTillNextFrame = (int) std::chrono::duration_cast<std::chrono::microseconds>(
-                t1 - std::chrono::high_resolution_clock::now()).count() + (int) 1e6 / FRAMERATE;
-        if (microTillNextFrame > 0)
-            std::this_thread::sleep_for(std::chrono::microseconds(microTillNextFrame));
+        while (std::chrono::duration_cast<std::chrono::microseconds>(
+                t1 - std::chrono::high_resolution_clock::now()).count() + (int) 1e6 / FRAMERATE> 0)
+            continue;
+
+        std::cerr << "Frame took: " << (int) std::chrono::duration_cast<std::chrono::milliseconds>(
+                std::chrono::high_resolution_clock::now() - t1).count() << " ms"<<std::endl;
 
         t1 = std::chrono::high_resolution_clock::now();
         frameCount++;
@@ -31,9 +33,7 @@ void Tetris::play() {
 
         window->render();
 
-        /*std::cerr << "Frame took: " << (int) std::chrono::duration_cast<std::chrono::milliseconds>(
-                std::chrono::high_resolution_clock::now() - t1).count() << " ms"<<std::endl;
-        */
+
     }
 
 }
@@ -58,7 +58,8 @@ void Tetris::reset() {
     state.emplace(MAIN_MENU);
 }
 
-Tetris::Tetris(Window *window, InputAdapter *inputAdapter) : window(window),inputAdapter(inputAdapter) {
+Tetris::Tetris(Window *window, InputAdapter *inputAdapter, SocketWrapper *socket)
+        : window(window),inputAdapter(inputAdapter), socket(socket) {
     reset();
 }
 

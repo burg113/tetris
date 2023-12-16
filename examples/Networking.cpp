@@ -48,9 +48,12 @@ void startClient() {
     std::stringstream strstr;
     strstr << binw(vec);
     clientSocket.send(strstr.str());
-    std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+    std::this_thread::sleep_for(std::chrono::milliseconds(3000));
     clientSocket.startListening();
-    ioService.run();
+    while(true){
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        ioService.poll();
+    }
 }
 
 void testNetworking(){
@@ -63,7 +66,10 @@ void testNetworking(){
         s.addConnectCallback(onConnectServer);
         s.startAccepting();
 
-        ioService.run();
+        while(true){
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+            ioService.poll();
+        }
     }
     catch (std::exception &e) {
         std::cerr << "Exception: " << e.what() << std::endl;

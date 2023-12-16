@@ -7,6 +7,8 @@
 
 #include "../examples/Networking.h"
 #include "networking/BinarySerialize.h"
+#include "networking/Server.h"
+#include "game/server/MirrorServer.h"
 
 /* Sets constants */
 #define WIDTH 800
@@ -18,6 +20,7 @@ using namespace std;
 bool dedicatedServer = false;
 bool openWindow = true;
 short debugLevel = -1;
+string ipAddress;
 
 // save get int
 int getInt(const string &s) {
@@ -44,14 +47,18 @@ void server(const string &s) {
     dedicatedServer = true;
 }
 
+void ipOption(const string &s){
+    ipAddress = s;
+}
+
 struct CmdLineArg {
     int priority;
-    function<void(const string&)> func;
+    function<void(const string &)> func;
     string payload;
 
     CmdLineArg() : priority(-1) {}
 
-    CmdLineArg(int priority, const function<void(const string&)> &execute) : priority(priority), func(execute) {}
+    CmdLineArg(int priority, const function<void(const string &)> &execute) : priority(priority), func(execute) {}
 
     bool operator<(const CmdLineArg &other) const {
         return priority < other.priority;
@@ -72,6 +79,7 @@ int32_t main(int argc, char *argv[]) {
     commandLineArguments["-debug"] = CmdLineArg(0, debug);
     commandLineArguments["-nogui"] = CmdLineArg(1, noGui);
     commandLineArguments["-server"] = CmdLineArg(10, server);
+    commandLineArguments["-ip"] = CmdLineArg(7, ipOption);
 
     priority_queue<CmdLineArg> args;
 
@@ -94,10 +102,23 @@ int32_t main(int argc, char *argv[]) {
     }
 
     if (dedicatedServer) {
-        if (openWindow) {
-            Window window(WIDTH,HEIGHT);
+        if (!openWindow) {
+            cerr << "cannot run mirror server without window! exiting" << endl;
+            return 1;
         }
-        // todo: implement server
+        if (openWindow) {
+            Window window(WIDTH, HEIGHT, "Mirror Server");
+            if (!window.valid) {
+                cerr << "failed to create window! exiting" << endl;
+                return 1;
+            }
+
+            asio::io_service ioService;
+            Server server(ioService, 13);
+
+            MirrorServer mirrorServer(&server, &window);
+            mirrorServer.run();
+        }
 
 
     } else {
@@ -106,14 +127,18 @@ int32_t main(int argc, char *argv[]) {
             return 1;
         }
         if (openWindow) {
-            Window window(WIDTH,HEIGHT);
+            Window window(WIDTH, HEIGHT, "Tetris");
             if (!window.valid) {
                 cerr << "failed to create window! exiting" << endl;
                 return 1;
             }
 
+            asio::io_service ioService;
+            SocketWrapper socket(ioService);
+            socket.connectToIp(asio::ip::address::from_string(ipAddress), 13);
+
             InputAdapter *inputAdapter = SDLInputAdapter::get();
-            Tetris tetris(&window,inputAdapter);
+            Tetris tetris(&window, inputAdapter, &socket);
             tetris.play();
         }
     }

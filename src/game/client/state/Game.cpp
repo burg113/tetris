@@ -4,6 +4,7 @@
 
 #include "Game.h"
 #include "game/io/input/SDLInputAdapter.h"
+#include "networking/BinarySerialize.h"
 
 Game::Game(Tetris *tetris) : tetris(tetris),virtualAdapter((int) GameLogic::Key::SIZE), gameLogic() {
 
@@ -12,6 +13,11 @@ Game::Game(Tetris *tetris) : tetris(tetris),virtualAdapter((int) GameLogic::Key:
         if (KEY_CONVERSION.count(key)) {
             for(int k : KEY_CONVERSION[key]) virtualAdapter.update(k,set);
         }
+    });
+    virtualAdapter.registerCallback([this](bool set, int key){
+        std::stringstream strstr;
+        strstr << binw(key) << binw(set);
+        this->tetris->socket->send(strstr.str());
     });
 }
 

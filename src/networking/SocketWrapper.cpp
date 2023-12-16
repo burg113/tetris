@@ -7,7 +7,7 @@
 int SocketWrapper::numSessions = 0;
 
 SocketWrapper::SocketWrapper(asio::io_service &ioService)
-        : socket(ioService), id(numSessions++) {
+        : socket(ioService), id(numSessions++), ioService(ioService) {
     len = 0;
     alive = true;
 }
@@ -46,6 +46,10 @@ void SocketWrapper::send(const std::string &str) {
 
 tcp::socket& SocketWrapper::getSocket() {
     return socket;
+}
+
+asio::io_service& SocketWrapper::getIoService() {
+    return ioService;
 }
 
 int SocketWrapper::getId() {

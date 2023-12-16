@@ -15,6 +15,9 @@ void Server::addConnectCallback(const SocketConnectCallback &callback) {
     connectCallbacks.push_back(callback);
 }
 
+asio::io_service& Server::getIoService(){
+    return ioService;
+}
 
 void Server::startAccepting() {
     auto *newSocket = new SocketWrapper(ioService);

@@ -12,6 +12,7 @@
 
 class GameLogic {
     friend class Game;
+    friend class MirrorServer;
 
 private:
     // see https://tetris.wiki/Super_Rotation_System#How_Guideline_SRS_Really_Works
@@ -54,16 +55,6 @@ private:
 
     InputAdapter *inputAdapter = nullptr;
 
-    enum Key {
-        LEFT,
-        RIGHT,
-        ROTATE_LEFT,
-        ROTATE_RIGHT,
-        INSTA_DROP,
-        FAST_FALL,
-        SIZE
-    };
-
     int holdFrameCooldown = 5;
     int inpL = -1, inpR = -1;
     int holdFrameRotationCooldown = 15;
@@ -100,6 +91,17 @@ private:
     Board board;
 
 public:
+
+    enum Key {
+        LEFT,
+        RIGHT,
+        ROTATE_LEFT,
+        ROTATE_RIGHT,
+        INSTA_DROP,
+        FAST_FALL,
+        SIZE
+    };
+
     GameLogic();
     void setInputAdapter(InputAdapter* inputAdapter);
 

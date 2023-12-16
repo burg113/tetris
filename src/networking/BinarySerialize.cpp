@@ -53,6 +53,9 @@ std::ostream& operator << (std::ostream &s, binary_write_t<int64_t> b){
     uint64_t x = htonll(static_cast<uint64_t>(b.t));
     return s.write(reinterpret_cast<char*>(&x), sizeof(x));
 }
+std::ostream& operator << (std::ostream &s, binary_write_t<bool> b){
+    return s << binw<uint8_t>(b.t);
+}
 
 std::istream& operator >> (std::istream &s, binary_read_t<uint8_t> b) {
     return s.read(reinterpret_cast<char*>(&b.t), sizeof(b.t));
@@ -93,4 +96,10 @@ std::istream& operator >> (std::istream &s, binary_read_t<int64_t> b) {
     auto &ret = s.read(reinterpret_cast<char*>(&x), sizeof(x));
     b.t = static_cast<int64_t>(ntohll(x));
     return ret;
+}
+std::istream& operator >> (std::istream &s, binary_read_t<bool> b){
+    uint8_t x;
+    s >> binr(x);
+    b.t = static_cast<bool>(x);
+    return s;
 }

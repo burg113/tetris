@@ -11,6 +11,7 @@
 #include "../io/input/InputAdapter.h"
 #include "state/Board.h"
 #include "state/ApplicationState.h"
+#include "networking/SocketWrapper.h"
 
 constexpr int STATE_COUNT = 3;
 enum StateEnum {
@@ -23,12 +24,14 @@ public:
     Window *window;
     InputAdapter *inputAdapter;
 
+    SocketWrapper *socket;
+
     std::vector<std::unique_ptr<ApplicationState>> stateInstances;
 
     std::stack<StateEnum> state;
 
 
-    Tetris(Window *window, InputAdapter *inputAdapter);
+    Tetris(Window *window, InputAdapter *inputAdapter, SocketWrapper *socket);
 
     void popStateStack();
     void gotoState(StateEnum s);

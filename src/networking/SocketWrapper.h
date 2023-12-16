@@ -38,6 +38,8 @@ public:
 
     tcp::socket& getSocket();
 
+    asio::io_service& getIoService();
+
     int getId();
 
     bool isAlive();
@@ -46,6 +48,8 @@ public:
 
 private:
     static int numSessions;
+
+    asio::io_service &ioService;
 
     tcp::socket socket;
     char buf[BUFFER_SIZE] = {};

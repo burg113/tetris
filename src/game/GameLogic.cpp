@@ -17,6 +17,8 @@ void GameLogic::setInputAdapter(InputAdapter* adapter) {
 }
 
 void GameLogic::reset() {
+    // TODO:
+    std::srand(42);
     board = Board(10, 20);
     piece = iPiece;
     resetPiece();

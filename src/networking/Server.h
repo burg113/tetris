@@ -15,6 +15,8 @@ public:
 
     void addConnectCallback(const SocketConnectCallback &callback);
 
+    asio::io_service& getIoService();
+
     void startAccepting();
 
 private:

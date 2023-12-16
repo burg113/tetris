@@ -36,6 +36,7 @@ std::ostream& operator << (std::ostream &s, binary_write_t<int8_t> b);
 std::ostream& operator << (std::ostream &s, binary_write_t<int16_t> b);
 std::ostream& operator << (std::ostream &s, binary_write_t<int32_t> b);
 std::ostream& operator << (std::ostream &s, binary_write_t<int64_t> b);
+std::ostream& operator << (std::ostream &s, binary_write_t<bool> b);
 
 std::istream& operator >> (std::istream &s, binary_read_t<uint8_t> b);
 std::istream& operator >> (std::istream &s, binary_read_t<uint16_t> b);
@@ -45,6 +46,7 @@ std::istream& operator >> (std::istream &s, binary_read_t<int8_t> b);
 std::istream& operator >> (std::istream &s, binary_read_t<int16_t> b);
 std::istream& operator >> (std::istream &s, binary_read_t<int32_t> b);
 std::istream& operator >> (std::istream &s, binary_read_t<int64_t> b);
+std::istream& operator >> (std::istream &s, binary_read_t<bool> b);
 
 // ==================================================================================================
 

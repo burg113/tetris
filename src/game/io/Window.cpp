@@ -6,7 +6,7 @@
 // delay for closing
 #define DELAY 100       // ms
 
-Window::Window(int width, int height) : width(width), height(height) {
+Window::Window(int width, int height, const std::string &title) : width(width), height(height) {
     data = std::vector<uint8_t>(width * height * 4, 0);
 
     valid = false;
@@ -23,7 +23,7 @@ Window::Window(int width, int height) : width(width), height(height) {
     }
 
     /* Creates a SDL window */
-    window = SDL_CreateWindow("Tetris", /* Title of the SDL window */
+    window = SDL_CreateWindow(title.c_str(), /* Title of the SDL window */
                               SDL_WINDOWPOS_UNDEFINED, /* Position x of the window */
                               SDL_WINDOWPOS_UNDEFINED, /* Position y of the window */
                               width, /* Width of the window in pixels */
