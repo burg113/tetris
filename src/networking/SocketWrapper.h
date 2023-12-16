@@ -14,7 +14,7 @@ using asio::ip::tcp;
 class SocketWrapper;
 
 using SocketConnectCallback = std::function<void(SocketWrapper*)>;
-using SocketReadCallback = std::function<void(SocketWrapper*, uint8_t, const std::string&)>;
+using SocketReadCallback = std::function<void(SocketWrapper*, const std::string&)>;
 using SocketKillCallback = std::function<void(SocketWrapper*)>;
 
 constexpr int BUFFER_SIZE = 1;
@@ -34,7 +34,7 @@ public:
 
     void sendRaw(const std::string &str);
 
-    void send(uint8_t header, const std::string &str);
+    void send(const std::string &str);
 
     tcp::socket& getSocket();
 
@@ -49,9 +49,6 @@ private:
 
     tcp::socket socket;
     char buf[BUFFER_SIZE] = {};
-    bool firstRead;
-    uint8_t curHeader;
-    int lenlen;
     uint32_t len;
     std::string data;
     int id;

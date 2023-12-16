@@ -5,9 +5,8 @@
 #include "Networking.h"
 #include <thread>
 
-void onReadServer(SocketWrapper* socket, uint8_t header, const std::string &data) {
+void onReadServer(SocketWrapper* socket, const std::string &data) {
     std::cout << "Socket " << socket->getId() << " received input." << std::endl;
-    std::cout << "Header: " << (int)header << std::endl;
     std::cout << "Data: " << data << std::endl;
     std::vector<short> vec;
     std::stringstream strstr(data);
@@ -16,7 +15,7 @@ void onReadServer(SocketWrapper* socket, uint8_t header, const std::string &data
     for(short x : vec) sum += x;
     std::stringstream out;
     out << binw(sum);
-    socket->send(0,out.str());
+    socket->send(out.str());
     std::cout << "Sent" << std::endl;
     socket->kill();
 }
@@ -31,7 +30,7 @@ void onConnectServer(SocketWrapper* socket) {
     socket->addKillCallback(onKillServer);
 }
 
-void onReadClient(SocketWrapper* socket, uint8_t header, const std::string &data) {
+void onReadClient(SocketWrapper* socket, const std::string &data) {
     int sum = 0;
     std::stringstream strstr(data);
     strstr >> binr(sum);
@@ -48,7 +47,7 @@ void startClient() {
     for(short s = 0; s < 200; s++) vec.push_back(s);
     std::stringstream strstr;
     strstr << binw(vec);
-    clientSocket.send(0, strstr.str());
+    clientSocket.send(strstr.str());
     std::this_thread::sleep_for(std::chrono::milliseconds(10000));
     clientSocket.startListening();
     ioService.run();
