@@ -6,14 +6,14 @@
 #include "game/io/input/SDLInputAdapter.h"
 #include "networking/BinarySerialize.h"
 
-Game::Game(Tetris *tetris) : tetris(tetris),virtualAdapter((int) GameLogic::Key::SIZE), gameLogic() {
+Game::Game(Tetris *tetris) : tetris(tetris), virtualAdapter((int) GameLogic::Key::SIZE), gameLogic() {
     gameLogic.setInputAdapter(&virtualAdapter);
-    SDLInputAdapter::get() -> registerCallback([this](bool set, int key) {
+    SDLInputAdapter::get()->registerCallback([this](bool set, int key) {
         if (KEY_CONVERSION.count(key)) {
-            for(int k : KEY_CONVERSION[key]) virtualAdapter.update(k,set);
+            for (int k: KEY_CONVERSION[key]) virtualAdapter.update(k, set);
         }
     });
-    virtualAdapter.registerCallback([this](bool set, int key){
+    virtualAdapter.registerCallback([this](bool set, int key) {
         std::stringstream strstr;
         strstr << binw((unsigned char) 0) << binw(key) << binw(set);
         this->tetris->socket->send(strstr.str());
@@ -44,14 +44,22 @@ void Game::render() {
         for (int x = 0; x < board->width; x++) {
             SDL_Color col;
 
-            if ((*board)[x][y] == BOARD_INDEX_EMTPY)
-                col = {10,10,10,255};
-            else {
+            if ((*board)[x][y] == BOARD_INDEX_EMTPY) {
+                col = {10, 10, 10, 255};
+                window->draw(upperCorner.x + size * x, upperCorner.y + size * y, size, size, col);
+            } else {
                 col = colors[(*board)[x][y]];
-                col.r *= .8; col.g *=.8, col.b*=.8;
+                col.r *= .8;
+                col.g *= .8;
+                col.b *= .8;
+                window->draw(upperCorner.x + size * x, upperCorner.y + size * y, size, size, col);
 
+                col.r *= .6;
+                col.g *= .6;
+                col.b *= .6;
+                window->drawBorder(upperCorner.x + size * x, upperCorner.y + size * y, size, size,
+                                   boarderWidth,col);
             }
-            window->draw(upperCorner.x + size * x, upperCorner.y + size * y, size, size, col);
         }
     }
 

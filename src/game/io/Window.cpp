@@ -62,20 +62,20 @@ void Window::render() {
 }
 
 void Window::draw(int x, int y, int dx, int dy, SDL_Color col) {
-    if (dx < 0 || dy < 0|| x<0|| y<0 || x + dx >= width || y+dy >= height) {
-        std::cerr << "invalid position to draw: " << x << " " << y << "   " << dx << " " << dy<<std::endl;
+    if (dx < 0 || dy < 0 || x < 0 || y < 0 || x + dx >= width || y + dy >= height) {
+        std::cerr << "invalid position to draw: " << x << " " << y << "   " << dx << " " << dy << std::endl;
         return;
     }
 
     std::vector<uint8_t> row;
-    for(int j = 0;j<dx;j++) {
+    for (int j = 0; j < dx; j++) {
         row.emplace_back(col.a);
         row.emplace_back(col.b);
         row.emplace_back(col.g);
         row.emplace_back(col.r);
     }
-    for(int i=y;i<dy+y;i++) {
-        memcpy(data.data() + (i * width + x)*4, row.data(),dx * 4);
+    for (int i = y; i < dy + y; i++) {
+        memcpy(data.data() + (i * width + x) * 4, row.data(), dx * 4);
     }
 }
 
@@ -88,6 +88,35 @@ Window::~Window() {
 
     /* Shuts down all SDL subsystems */
     SDL_Quit();
+
+}
+
+void Window::drawBorder(int x, int y, int dx, int dy, int w, SDL_Color col) {
+    if (dx < 0 || dy < 0 || x < 0 || y < 0 || x + dx >= width || y + dy >= height) {
+        std::cerr << "invalid position to draw: " << x << " " << y << "   " << dx << " " << dy << std::endl;
+        return;
+    }
+    if (w > dx || w > dy) {
+        std::cerr << "invalid width of boarder: " << w
+                  << "  on rectangle of dimensions" << dx << " " << dy << std::endl;
+        return;
+    }
+
+    std::vector<uint8_t> pixel = {col.a, col.b, col.g, col.r};
+
+    for (int j = x; j < x + dx; j++) {
+        for (int i = 0; i < w; i++) {
+            memcpy(data.data() + ((y + i) * width + j) * 4, pixel.data(), 4);
+            memcpy(data.data() + ((y + dy - i-1) * width + j) * 4, pixel.data(), 4);
+        }
+    }
+    for (int j = y + w; j <= y + dy - w; j++) {
+        for (int i = 0; i < w; i++) {
+            memcpy(data.data() + (j * width + x + i) * 4, pixel.data(), 4);
+            memcpy(data.data() + (j * width + x + dx - i-1) * 4, pixel.data(), 4);
+        }
+    }
+
 
 }
 

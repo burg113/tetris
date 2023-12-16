@@ -44,6 +44,9 @@ class Game : public ApplicationState{
                                      {20, 200, 240, 255},
                                      {215, 220, 0, 255}};
 
+    int boarderWidth = 3;
+
+
 public:
     explicit Game(Tetris *tetris);
 
