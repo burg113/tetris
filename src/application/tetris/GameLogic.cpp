@@ -6,7 +6,7 @@
 
 #include <utility>
 
-GameLogic::GameLogic() :board(0, 0), piece(iPiece){
+GameLogic::GameLogic() : board(0, 0), pieceInd(5) {
     reset();
 }
 
@@ -14,12 +14,12 @@ void GameLogic::reset() {
     // TODO:
     std::srand(42);
     board = Board(10, 20);
-    piece = iPiece;
+    pieceInd = 5;
     resetPiece();
 }
 
 
-void GameLogic::update(const InputData& inputData) {
+void GameLogic::update(const InputData &inputData) {
     handleInput(inputData);
 
     if (inpL >= 0 && checkOffset(Vec2(-1, 0))) {
@@ -67,22 +67,22 @@ void GameLogic::update(const InputData& inputData) {
 void GameLogic::lockPiece() {
     framesToFall = framesPerFall;
 
-    for (Vec2 v: piece.tiles) {
+    for (Vec2 v: pieces[pieceInd].tiles) {
         Vec2 p = v.rot(rotation) + position;
-        board[p] = piece.colorId;
+        board[p] = pieces[pieceInd].colorId;
     }
 
     board.update();
 
     resetPiece();
 
-    if (!checkPos(position, piece, rotation)) {
+    if (!checkPos(position, pieces[pieceInd], rotation)) {
         board.reset();
     }
 }
 
 
-void GameLogic::handleInput(const InputData& inputData) {
+void GameLogic::handleInput(const InputData &inputData) {
     bool l = inputData.isDown(Key::LEFT);
     bool r = inputData.isDown(Key::RIGHT);
     if (l && !r) inpL++, inpR = -1;
@@ -101,7 +101,7 @@ void GameLogic::handleInput(const InputData& inputData) {
 }
 
 void GameLogic::resetPiece() {
-    piece = getNextTetromino();
+    pieceInd = getNextTetromino();
     position = Vec2((board.width - 1) / 2, 1);
     rotation = 0;
 }
@@ -121,17 +121,17 @@ bool GameLogic::checkPos(Vec2 pos) {
     return (board[pos] == BOARD_INDEX_EMTPY);
 }
 
-GameLogic::Piece GameLogic::getNextTetromino() {
-    std::vector<Piece> pieces = {iPiece, jPiece, lPiece, oPiece, sPiece, tPiece, zPiece};
-    return pieces[std::rand() % 7];
+int GameLogic::getNextTetromino() {
+    return std::rand() % 7;
 }
 
 bool GameLogic::checkOffset(Vec2 posOffset) {
-    return checkPos(position + posOffset, piece, rotation);
+    return checkPos(position + posOffset, pieces[pieceInd], rotation);
 }
 
 bool GameLogic::tryRotate(bool clockwise) {
     rotation = (rotation % 4 + 4) % 4;
+    Piece &piece = pieces[pieceInd];
     if (clockwise) {
         for (int i = 0; i < rotationTable[piece.type][0].size(); i++) {
             Vec2 rotOffset = rotationTable[piece.type][rotation][i] - rotationTable[piece.type][(rotation + 1) % 4][i];
@@ -152,6 +152,24 @@ bool GameLogic::tryRotate(bool clockwise) {
         }
     }
     return false;
+}
+
+std::ostream &operator<<(std::ostream &s, binary_write_t<GameLogic> gameLogic) {
+    auto &g = gameLogic.t;
+    s << binw(g.board)
+      << binw(g.inpL) << binw(g.inpR) << binw(g.inpRl) << binw(g.inpRr)
+      << binw(g.frameCount) << binw(g.framesToFall) << binw(g.position) << binw(g.rotation) << binw(g.pieceInd);
+
+    return s;
+}
+
+std::istream &operator>>(std::istream &s, binary_read_t<GameLogic> gameLogic) {
+    auto &g = gameLogic.t;
+    s >> binr(g.board)
+      >> binr(g.inpL) >> binr(g.inpR) >> binr(g.inpRl) >> binr(g.inpRr)
+      >> binr(g.frameCount) >> binr(g.framesToFall) >> binr(g.position) >> binr(g.rotation) >> binr(g.pieceInd);
+
+    return s;
 }
 
 

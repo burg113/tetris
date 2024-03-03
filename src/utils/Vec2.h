@@ -5,8 +5,7 @@
 #ifndef TETRIS_VEC2_H
 #define TETRIS_VEC2_H
 
-
-#include <complex>
+#include "networking/BinarySerialize.h"
 
 class Vec2 {
 public:
@@ -36,6 +35,9 @@ public:
     Vec2 rotR();
 
     Vec2 rot(int i);
+
+    friend std::ostream& operator << (std::ostream &s, binary_write_t<Vec2> vec);
+    friend std::istream& operator >> (std::istream &s, binary_read_t<Vec2> vec);
 };
 
 

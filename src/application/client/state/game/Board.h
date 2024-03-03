@@ -2,13 +2,13 @@
 // Created by Burg on 08.12.2023.
 //
 
+#ifndef TETRIS_BOARD_H
+#define TETRIS_BOARD_H
 
 #include <vector>
 #include <iostream>
 #include "utils/Vec2.h"
-
-#ifndef TETRIS_BOARD_H
-#define TETRIS_BOARD_H
+#include "networking/BinarySerialize.h"
 
 constexpr unsigned char BOARD_INDEX_EMTPY = 255;
 
@@ -41,6 +41,10 @@ public:
         }
         return board[vec.x][vec.y];
     };
+
+
+    friend std::ostream& operator << (std::ostream &s, binary_write_t<Board> b);
+    friend std::istream& operator >> (std::istream &s, binary_read_t<Board> b);
 };
 
 

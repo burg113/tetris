@@ -25,6 +25,12 @@ void MirrorServer::handleSocketRead(SocketWrapper *socket, const std::string &da
         InputData inputData;
         strstr >> binr(frameCount) >> binr(inputData);
         game.update(inputData);
+
+        // respond with game state after input
+        std::stringstream stream;
+        stream << binw(game);
+        socket->send(stream.str());
+
         render();
     }
     else{
@@ -89,8 +95,8 @@ void MirrorServer::render() {
     Vec2 offset(0, size - (size * game.framesToFall) / game.framesPerFall);
     if (!game.checkOffset(Vec2(0, 1)) || !smoothAnimation) offset = Vec2(0, 0);
 
-    for (Vec2 v: game.piece.tiles) {
+    for (Vec2 v: game.pieces[game.pieceInd].tiles) {
         Vec2 p = upperCorner + offset + (v.rot(game.rotation) + game.position) * size;
-        window->draw(p.x, p.y, size, size, colors[game.piece.colorId]);
+        window->draw(p.x, p.y, size, size, colors[game.pieces[game.pieceInd].colorId]);
     }
 }

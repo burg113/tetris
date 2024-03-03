@@ -66,8 +66,8 @@ void Game::render() {
     Vec2 offset(0, size - (size * gameLogic.framesToFall) / gameLogic.framesPerFall);
     if (!gameLogic.checkOffset(Vec2(0, 1)) || !smoothAnimation) offset = Vec2(0, 0);
 
-    for (Vec2 v: gameLogic.piece.tiles) {
+    for (Vec2 v: gameLogic.pieces[gameLogic.pieceInd].tiles) {
         Vec2 p = upperCorner + offset + (v.rot(gameLogic.rotation) + gameLogic.position) * size;
-        window->draw(p.x, p.y, size, size, colors[gameLogic.piece.colorId]);
+        window->draw(p.x, p.y, size, size, colors[gameLogic.pieces[gameLogic.pieceInd].colorId]);
     }
 }

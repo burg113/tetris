@@ -2,11 +2,11 @@
 // Created by Burg on 08.12.2023.
 //
 
-using namespace std;
 
 #include <iostream>
 #include "Board.h"
 
+using namespace std;
 
 Board::Board(int w, int h) : width(w), height(h) {
     reset();
@@ -77,6 +77,16 @@ void Board::update() {
         }
     }
 
+}
+
+std::ostream &operator<<(ostream &s, binary_write_t<Board> b) {
+    s << binw(b.t.board);
+    return s;
+}
+
+std::istream &operator>>(istream &s, binary_read_t<Board> b) {
+    s >> binr(b.t.board);
+    return s;
 }
 
 

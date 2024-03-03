@@ -54,15 +54,18 @@ private:
 
     Piece oPiece = Piece({Vec2(0, 0), Vec2(1, 0), Vec2(0, -1), Vec2(1, -1)}, 2, 6);
 
+    std::vector<Piece> pieces = {jPiece,lPiece,sPiece,tPiece,zPiece,iPiece,oPiece};
 
-    int holdFrameCooldown = 5;
+    const int lockLeniency = 8;
+    const int fastFallExtraSpeed = 5;
+    const int holdFrameCooldown = 5;
+    const int holdFrameRotationCooldown = 15;
+    const int framesPerFall = 10;
+
     int inpL = -1, inpR = -1;
-    int holdFrameRotationCooldown = 15;
     int inpRl = -1, inpRr = -1;
 
     bool instaDrop = false;
-    int lockLeniency = 8;
-    int fastFallExtraSpeed = 5;
 
     void reset();
 
@@ -75,16 +78,15 @@ private:
 
     bool tryRotate(bool clockwise);
 
-    Piece getNextTetromino();
+    int getNextTetromino();
     void resetPiece();
     bool checkOffset(Vec2 posOffset);
 
-    int framesPerFall = 10;
     int frameCount = 0;
     int framesToFall = 0;
     Vec2 position;
     int rotation = 0;
-    Piece piece;
+    int pieceInd;
 
     Board board;
 
@@ -103,6 +105,9 @@ public:
     GameLogic();
 
     void update(const InputData& inputData);
+
+    friend std::ostream& operator << (std::ostream &s, binary_write_t<GameLogic> gameLogic);
+    friend std::istream& operator >> (std::istream &s, binary_read_t<GameLogic> gameLogic);
 };
 
 
