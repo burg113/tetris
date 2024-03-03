@@ -14,7 +14,7 @@ Board::Board(int w, int h) : width(w), height(h) {
 
 vector<uint8_t> Board::serialize() {
     vector<uint8_t> outBuff;
-
+    
     outBuff.emplace_back(width);
     outBuff.emplace_back(width >> 8);
     outBuff.emplace_back(height);

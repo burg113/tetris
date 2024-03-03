@@ -5,10 +5,10 @@
 #ifndef TETRIS_MIRRORSERVER_H
 #define TETRIS_MIRRORSERVER_H
 
-#include "game/GameLogic.h"
+#include "application/tetris/GameLogic.h"
 #include "networking/ServerHelper.h"
-#include "game/io/input/VirtualInputAdapter.h"
-#include "game/io/Window.h"
+#include "application/io/input/VirtualInputAdapter.h"
+#include "application/io/Window.h"
 
 class MirrorServer {
     int FRAMERATE = 60;

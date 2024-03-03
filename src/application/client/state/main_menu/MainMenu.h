@@ -5,8 +5,8 @@
 #ifndef TETRIS_MAINMENU_H
 #define TETRIS_MAINMENU_H
 
-#include "ApplicationState.h"
-#include "../Tetris.h"
+#include "application/client/state/ApplicationState.h"
+#include "application/client/Tetris.h"
 
 class MainMenu : public ApplicationState {
     Tetris *tetris;

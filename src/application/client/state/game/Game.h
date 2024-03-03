@@ -5,11 +5,11 @@
 #ifndef TETRIS_GAME_H
 #define TETRIS_GAME_H
 
-#include "ApplicationState.h"
-#include "../Tetris.h"
-#include "game/io/input/InputAdapter.h"
-#include "game/GameLogic.h"
-#include "game/io/input/VirtualInputAdapter.h"
+#include "application/client/state/ApplicationState.h"
+#include "application/client/Tetris.h"
+#include "application/io/input/InputAdapter.h"
+#include "application/tetris/GameLogic.h"
+#include "application/io/input/VirtualInputAdapter.h"
 
 class Game : public ApplicationState{
     GameLogic gameLogic;

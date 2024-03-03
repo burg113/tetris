@@ -1,14 +1,14 @@
 #include <bits/stdc++.h>
 
 #include <SDL.h>
-#include "game/io/Window.h"
-#include "game/client/Tetris.h"
-#include "game/io/input/SDLInputAdapter.h"
+#include "application/io/Window.h"
+#include "application/client/Tetris.h"
+#include "application/io/input/SDLInputAdapter.h"
 
 #include "../examples/Networking.h"
 #include "networking/BinarySerialize.h"
 #include "networking/ServerHelper.h"
-#include "game/server/MirrorServer.h"
+#include "application/server/MirrorServer.h"
 
 /* Sets constants */
 #define WIDTH 800

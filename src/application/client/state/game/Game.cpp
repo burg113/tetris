@@ -3,7 +3,7 @@
 //
 
 #include "Game.h"
-#include "game/io/input/SDLInputAdapter.h"
+#include "application/io/input/SDLInputAdapter.h"
 #include "networking/BinarySerialize.h"
 
 Game::Game(Tetris *tetris) : tetris(tetris), virtualAdapter((int) GameLogic::Key::SIZE), gameLogic() {

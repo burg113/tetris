@@ -4,7 +4,7 @@
 
 #include "MirrorServer.h"
 #include "networking/BinarySerialize.h"
-#include "game/io/input/SDLInputAdapter.h"
+#include "application/io/input/SDLInputAdapter.h"
 #include <thread>
 
 MirrorServer::MirrorServer(ServerHelper *server, Window *window) : server(server), window(window),

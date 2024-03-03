@@ -8,9 +8,9 @@
 #include "Tetris.h"
 
 #include "state/ApplicationState.h"
-#include "state/MainMenu.h"
-#include "state/Game.h"
-#include "state/Menu.h"
+#include "application/client/state/main_menu/MainMenu.h"
+#include "application/client/state/game/Game.h"
+#include "application/client/state/menu/Menu.h"
 
 void Tetris::play() {
     auto t1 = std::chrono::high_resolution_clock::now();

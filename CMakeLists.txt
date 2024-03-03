@@ -6,23 +6,23 @@ set(CMAKE_CXX_STANDARD 17)
 add_executable(tetris
         src/main.cpp
 
-        src/game/client/Tetris.cpp
-        src/game/client/state/Board.cpp
-        src/game/io/Window.cpp
-        src/game/io/input/InputAdapter.cpp
-        src/game/io/input/VirtualInputAdapter.cpp
-        src/game/io/input/SDLInputAdapter.cpp
+        src/application/client/Tetris.cpp
+        src/application/client/state/game/Board.cpp
+        src/application/io/Window.cpp
+        src/application/io/input/InputAdapter.cpp
+        src/application/io/input/VirtualInputAdapter.cpp
+        src/application/io/input/SDLInputAdapter.cpp
 
-        src/game/client/state/Menu.cpp
-        src/game/client/state/MainMenu.cpp
-        src/game/GameLogic.cpp
-        src/game/client/state/Game.cpp
+        src/application/client/state/menu/Menu.cpp
+        src/application/client/state/main_menu/MainMenu.cpp
+        src/application/tetris/GameLogic.cpp
+        src/application/client/state/game/Game.cpp
 
         src/utils/Vec2.cpp
-        src/game/client/Tetris.cpp
+        src/application/client/Tetris.cpp
 
         examples/Networking.cpp
-        src/networking/BinarySerialize.cpp src/networking/SocketWrapper.cpp src/networking/Server.cpp src/game/server/MirrorServer.cpp)
+        src/networking/BinarySerialize.cpp src/networking/SocketWrapper.cpp src/networking/Server.cpp src/application/server/MirrorServer.cpp)
 
 include_directories(
         lib/asio/asio/include
