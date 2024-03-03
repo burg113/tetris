@@ -9,23 +9,37 @@
 Game::Game(Tetris *tetris) : tetris(tetris), inputData((int) GameLogic::Key::SIZE), gameLogic() {
     SDLInputAdapter::get()->registerCallback([this](bool set, int key) {
         if (KEY_CONVERSION.count(key)) {
-            std::cerr << key << " " << set << std::endl;
             for (int k: KEY_CONVERSION[key]){
                 inputData.update(k, set);
             }
         }
+    });
+
+    tetris->socket->addReadCallback([this](SocketWrapper* socket, const std::string& s){
+        std::stringstream stream(s);
+
+        int frameC = gameLogic.frameCount;
+        stream >> binr(this->gameLogic);
+
+        while (!inputHistory.empty() && inputHistory.front().first < gameLogic.frameCount) inputHistory.pop_front();
+
+        auto it = inputHistory.begin();
+        while (it != inputHistory.end() && gameLogic.frameCount < frameC) gameLogic.update((it++)->second);
+
     });
 }
 
 void Game::sendFrameData() {
     std::stringstream strstr;
     strstr << binw((unsigned char) 0) << binw(gameLogic.frameCount) << binw(inputData);
-    this->tetris->socket->send(strstr.str());
+    tetris->socket->send(strstr.str());
 }
 
 void Game::update() {
+    tetris->socket->getIoService().poll();
     SDLInputAdapter::get()->update();
     sendFrameData();
+    inputHistory.emplace_back(gameLogic.frameCount,inputData);
     gameLogic.update(inputData);
     inputData.update(GameLogic::Key::INSTA_DROP, false);
     render();

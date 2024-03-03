@@ -122,7 +122,7 @@ bool GameLogic::checkPos(Vec2 pos) {
 }
 
 int GameLogic::getNextTetromino() {
-    return std::rand() % 7;
+    return frameCount % 7; // todo
 }
 
 bool GameLogic::checkOffset(Vec2 posOffset) {

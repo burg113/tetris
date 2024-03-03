@@ -12,12 +12,15 @@
 #include "application/io/input/VirtualInputAdapter.h"
 
 class Game : public ApplicationState{
+    std::mutex gameLogicMutex;
     GameLogic gameLogic;
+
     bool smoothAnimation = true;
 
     Tetris *tetris;
-
     InputData inputData;
+
+    std::deque<std::pair<int,InputData>> inputHistory;
 
     SDL_Scancode KEY_INSTA_DROP = SDL_Scancode::SDL_SCANCODE_SPACE;
     SDL_Scancode KEY_FAST_FALL = SDL_Scancode::SDL_SCANCODE_LCTRL;

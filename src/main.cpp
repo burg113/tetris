@@ -142,6 +142,7 @@ int32_t main(int argc, char *argv[]) {
             asio::io_service ioService;
             SocketWrapper socket(ioService);
             socket.connect(host, service);
+            socket.startListening();
 
             InputAdapter *inputAdapter = SDLInputAdapter::get();
             Tetris tetris(&window, inputAdapter, &socket);
