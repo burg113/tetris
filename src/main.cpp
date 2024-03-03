@@ -120,7 +120,7 @@ int32_t main(int argc, char *argv[]) {
             }
 
             asio::io_service ioService;
-            ServerHelper server(ioService, 13);
+            ServerHelper server(ioService, 2024);
 
             MirrorServer mirrorServer(&server, &window);
             mirrorServer.run();

@@ -21,8 +21,8 @@ void Tetris::play() {
                 t1 - std::chrono::high_resolution_clock::now()).count() + (int) 1e6 / FRAMERATE> 0)
             continue;
 
-        std::cerr << "Frame took: " << (int) std::chrono::duration_cast<std::chrono::milliseconds>(
-                std::chrono::high_resolution_clock::now() - t1).count() << " ms"<<std::endl;
+//        std::cerr << "Frame took: " << (int) std::chrono::duration_cast<std::chrono::milliseconds>(
+//                std::chrono::high_resolution_clock::now() - t1).count() << " ms"<<std::endl;
 
         t1 = std::chrono::high_resolution_clock::now();
         frameCount++;

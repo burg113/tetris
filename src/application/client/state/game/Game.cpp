@@ -10,6 +10,7 @@ Game::Game(Tetris *tetris) : tetris(tetris), virtualAdapter((int) GameLogic::Key
     gameLogic.setInputAdapter(&virtualAdapter);
     SDLInputAdapter::get()->registerCallback([this](bool set, int key) {
         if (KEY_CONVERSION.count(key)) {
+            std::cerr << key << " " << set << std::endl;
             for (int k: KEY_CONVERSION[key]) virtualAdapter.update(k, set);
         }
     });
@@ -28,6 +29,7 @@ void Game::update() {
     this->tetris->socket->send(strstr.str());
 
     gameLogic.update();
+    virtualAdapter.update(GameLogic::Key::INSTA_DROP, false);
     render();
 }
 

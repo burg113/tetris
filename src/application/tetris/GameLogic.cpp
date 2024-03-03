@@ -13,7 +13,7 @@ GameLogic::GameLogic() :board(0, 0), piece(iPiece){
 
 void GameLogic::setInputAdapter(InputAdapter* adapter) {
     inputAdapter = adapter;
-    inputAdapter->registerCallback([this](bool b, int key) { this->handleInputCallback(b, key); });
+//    inputAdapter->registerCallback([this](bool b, int key) { this->handleInputCallback(b, key); });
 }
 
 void GameLogic::reset() {
@@ -100,12 +100,16 @@ void GameLogic::handleInput() {
     if (rl && !rr) inpRl++, inpRr = -1;
     else if (rr && !rl) inpRl = -1, inpRr++;
     else inpRl = inpRr = -1;
+
+    if (inputAdapter->isDown(Key::INSTA_DROP)) {
+        instaDrop = true;
+    }
 }
 
 void GameLogic::handleInputCallback(bool pressed, int key) {
-    if (pressed && key == Key::INSTA_DROP) {
-        instaDrop = true;
-    }
+//    if (pressed && key == Key::INSTA_DROP) {
+//        instaDrop = true;
+//    }
 }
 
 void GameLogic::resetPiece() {
