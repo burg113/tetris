@@ -7,7 +7,7 @@
 
 void onReadServer(SocketWrapper* socket, const std::string &data) {
     std::cout << "Socket " << socket->getId() << " received input." << std::endl;
-    std::cout << "Data: " << data << std::endl;
+    std::cout << "Data: " << data.size() << " " << data << std::endl;
     std::vector<short> vec;
     std::stringstream strstr(data);
     strstr >> binr(vec);
@@ -17,7 +17,6 @@ void onReadServer(SocketWrapper* socket, const std::string &data) {
     out << binw(sum);
     socket->send(out.str());
     std::cout << "Sent" << std::endl;
-    socket->kill();
 }
 
 void onKillServer(SocketWrapper* socket) {
@@ -42,12 +41,14 @@ void startClient() {
     asio::io_service ioService;
     SocketWrapper clientSocket(ioService);
     clientSocket.addReadCallback(onReadClient);
-    clientSocket.connectToIp(asio::ip::address::from_string("127.0.0.1"), 13);
-    std::vector<short> vec;
-    for(short s = 0; s < 200; s++) vec.push_back(s);
-    std::stringstream strstr;
-    strstr << binw(vec);
-    clientSocket.send(strstr.str());
+    clientSocket.connectToIp(asio::ip::address::from_string("127.0.0.1"), 2024);
+    for(int it = 0; it < 5; it++){
+        std::vector<short> vec;
+        for(short s = 0; s < 199; s++) vec.push_back(s);
+        std::stringstream strstr;
+        strstr << binw(vec);
+        clientSocket.send(strstr.str());
+    }
     std::this_thread::sleep_for(std::chrono::milliseconds(3000));
     clientSocket.startListening();
     while(true){
@@ -62,7 +63,7 @@ void testNetworking(){
     try {
         asio::io_service ioService;
 
-        ServerHelper s(ioService, 13);
+        ServerHelper s(ioService, 2024);
         s.addConnectCallback(onConnectServer);
         s.startAccepting();
 

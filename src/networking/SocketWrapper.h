@@ -21,8 +21,6 @@ using SocketConnectCallback = std::function<void(SocketWrapper*)>;
 using SocketReadCallback = std::function<void(SocketWrapper*, const std::string&)>;
 using SocketKillCallback = std::function<void(SocketWrapper*)>;
 
-constexpr int BUFFER_SIZE = 512;
-
 class SocketWrapper {
 public:
 
@@ -54,6 +52,11 @@ public:
     void kill();
 
 private:
+    // The maximum amount of data which can be received at once
+    static constexpr int BUFFER_SIZE = 512;
+    // The number of bytes appended to the data buffer before we check if
+    static constexpr int APPEND_SIZE = 8;
+
     static int numSessions;
 
     asio::io_service &ioService;
@@ -68,6 +71,7 @@ private:
     std::vector<SocketReadCallback> readCallbacks;
     std::vector<SocketKillCallback> killCallbacks;
 
+    void appendData(std::string newData);
     void handleRead(const asio::error_code &err, size_t numBytes);
     void doReadSome();
 };

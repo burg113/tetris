@@ -77,15 +77,9 @@ void SocketWrapper::kill() {
     }
 }
 
-void SocketWrapper::handleRead(const asio::error_code &err, size_t numBytes) {
-    if (err) {
-        std::cerr << "Socket " << id << " received error " << err.value() << ": " << err.message() << std::endl;
-        kill();
-        return;
-    }
-//    std::cout << "Socked " << id << " received " << (int)buf[0] << std::endl;
+void SocketWrapper::appendData(std::string newData) {
     uint32_t oldLen = data.size();
-    data += std::string(buf, buf + numBytes);
+    data += newData;
     if (oldLen < 4 && 4 <= data.size()) {
         for (int i = 0; i < 4; i++) {
             len *= 256;
@@ -93,28 +87,37 @@ void SocketWrapper::handleRead(const asio::error_code &err, size_t numBytes) {
         }
         len += 4;
     }
-    if(data.size() >= 4) {
-        if (data.size() > len) {
-            std::cerr << "WARNING: Socket " << id << " received message of length " << data.size() << " but header said that it has length " << len << std::endl;
-        }
+    if(data.size() >= 4){
         if (data.size() >= len) {
-            // handle message
             for(const SocketReadCallback &callback : readCallbacks) {
-                callback(this, data.substr(4));
+                callback(this, data.substr(4, len-4));
             }
-            // reset state
+            std::string startOfNextMessage = data.substr(len);
             len = 0;
             data.clear();
+            if(!startOfNextMessage.empty()) appendData(startOfNextMessage);
         }
+    }
+}
+
+void SocketWrapper::handleRead(const asio::error_code &err, size_t numBytes) {
+    if (err) {
+        std::cerr << "Socket " << id << " received error " << err.value() << ": " << err.message() << std::endl;
+        kill();
+        return;
+    }
+    std::string newData = std::string(buf, buf + numBytes);
+    for(int i = 0; i < newData.size(); i += APPEND_SIZE){
+        appendData(newData.substr(i, APPEND_SIZE));
     }
     if(alive) {
         doReadSome();
     }
 }
 
-
-
 void SocketWrapper::doReadSome() {
     socket.async_read_some(asio::buffer(buf, BUFFER_SIZE),
                            [this](const asio::error_code &e, size_t nb) {this->handleRead(e, nb);});
 }
+
+
