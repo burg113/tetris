@@ -36,17 +36,3 @@ bool InputAdapter::quit() {
     return quitFlag;
 }
 
-std::ostream &operator<<(std::ostream &s, binary_write_t<InputAdapter> inputAdapter) {
-    auto &inp = inputAdapter.t;
-    s << binw(inp.quitFlag);
-    s << binw(inp.keys);
-    return s;
-}
-
-std::istream &operator>>(std::istream &s, binary_read_t<InputAdapter> inputAdapter){
-    auto &inp = inputAdapter.t;
-    s >> binr(inp.quitFlag);
-    s >> binr(inp.keys);
-    return s;
-}
-

@@ -7,7 +7,7 @@
 
 #include "InputAdapter.h"
 
-class VirtualInputAdapter : public InputAdapter {
+class [[deprecated]] VirtualInputAdapter : public InputAdapter {
 
 public:
     explicit VirtualInputAdapter(int size);

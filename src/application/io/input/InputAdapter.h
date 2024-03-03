@@ -41,8 +41,6 @@ public:
 
     bool quit();
 
-    friend std::ostream& operator << (std::ostream &s, binary_write_t<InputAdapter> inputAdapter);
-    friend std::istream& operator >> (std::istream &s, binary_read_t<InputAdapter> inputAdapter);
 };
 
 
