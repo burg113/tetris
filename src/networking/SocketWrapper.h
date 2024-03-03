@@ -5,6 +5,10 @@
 #ifndef TETRIS_SOCKETWRAPPER_H
 #define TETRIS_SOCKETWRAPPER_H
 
+#ifdef _WIN32
+    #include <winsock2.h>
+#endif
+
 #include <asio.hpp>
 #include <iostream>
 

@@ -11,7 +11,7 @@
 #include <vector>
 
 #ifdef _WIN32
-#include <winsock.h>
+#include <winsock2.h>
 #else
 #include <arpa/inet.h>
 #endif
