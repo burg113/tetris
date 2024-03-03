@@ -36,7 +36,6 @@ public:
 
     ServerHelper *server;
     Window *window;
-    VirtualInputAdapter inputAdapter;
     GameLogic game;
 };
 

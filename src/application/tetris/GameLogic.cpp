@@ -10,12 +10,6 @@ GameLogic::GameLogic() :board(0, 0), piece(iPiece){
     reset();
 }
 
-
-void GameLogic::setInputAdapter(InputAdapter* adapter) {
-    inputAdapter = adapter;
-//    inputAdapter->registerCallback([this](bool b, int key) { this->handleInputCallback(b, key); });
-}
-
 void GameLogic::reset() {
     // TODO:
     std::srand(42);
@@ -25,8 +19,8 @@ void GameLogic::reset() {
 }
 
 
-void GameLogic::update() {
-    handleInput();
+void GameLogic::update(const InputData& inputData) {
+    handleInput(inputData);
 
     if (inpL >= 0 && checkOffset(Vec2(-1, 0))) {
         inpL = -holdFrameCooldown;
@@ -44,7 +38,7 @@ void GameLogic::update() {
         if (tryRotate(true)) inpRr = -holdFrameRotationCooldown;
     }
 
-    if (inputAdapter->isDown(Key::FAST_FALL)) {
+    if (inputData.isDown(Key::FAST_FALL)) {
         framesToFall -= fastFallExtraSpeed;
     }
 
@@ -88,28 +82,22 @@ void GameLogic::lockPiece() {
 }
 
 
-void GameLogic::handleInput() {
-    bool l = inputAdapter->isDown(Key::LEFT);
-    bool r = inputAdapter->isDown(Key::RIGHT);
+void GameLogic::handleInput(const InputData& inputData) {
+    bool l = inputData.isDown(Key::LEFT);
+    bool r = inputData.isDown(Key::RIGHT);
     if (l && !r) inpL++, inpR = -1;
     else if (r && !l) inpL = -1, inpR++;
     else inpL = inpR = -1;
 
-    bool rl = inputAdapter->isDown(Key::ROTATE_LEFT);
-    bool rr = inputAdapter->isDown(Key::ROTATE_RIGHT);
+    bool rl = inputData.isDown(Key::ROTATE_LEFT);
+    bool rr = inputData.isDown(Key::ROTATE_RIGHT);
     if (rl && !rr) inpRl++, inpRr = -1;
     else if (rr && !rl) inpRl = -1, inpRr++;
     else inpRl = inpRr = -1;
 
-    if (inputAdapter->isDown(Key::INSTA_DROP)) {
+    if (inputData.isDown(Key::INSTA_DROP)) {
         instaDrop = true;
     }
-}
-
-void GameLogic::handleInputCallback(bool pressed, int key) {
-//    if (pressed && key == Key::INSTA_DROP) {
-//        instaDrop = true;
-//    }
 }
 
 void GameLogic::resetPiece() {

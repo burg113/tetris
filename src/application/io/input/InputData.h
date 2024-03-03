@@ -9,7 +9,17 @@
 #include "networking/BinarySerialize.h"
 
 class InputData {
+
     std::vector<bool> keys;
+
+public:
+
+    explicit InputData() = default;
+    explicit InputData(int size);
+
+    bool isDown(int keyCode) const;
+
+    void update(int keyCode,bool state);
 
     friend std::ostream& operator << (std::ostream &s, binary_write_t<InputData> inputAdapter);
     friend std::istream& operator >> (std::istream &s, binary_read_t<InputData> inputAdapter);

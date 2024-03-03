@@ -6,30 +6,28 @@
 #include "application/io/input/SDLInputAdapter.h"
 #include "networking/BinarySerialize.h"
 
-Game::Game(Tetris *tetris) : tetris(tetris), virtualAdapter((int) GameLogic::Key::SIZE), gameLogic() {
-    gameLogic.setInputAdapter(&virtualAdapter);
+Game::Game(Tetris *tetris) : tetris(tetris), inputData((int) GameLogic::Key::SIZE), gameLogic() {
     SDLInputAdapter::get()->registerCallback([this](bool set, int key) {
         if (KEY_CONVERSION.count(key)) {
             std::cerr << key << " " << set << std::endl;
-            for (int k: KEY_CONVERSION[key]) virtualAdapter.update(k, set);
+            for (int k: KEY_CONVERSION[key]){
+                inputData.update(k, set);
+            }
         }
     });
-    virtualAdapter.registerCallback([this](bool set, int key) {
-        std::stringstream strstr;
-        strstr << binw((unsigned char) 0) << binw(key) << binw(set);
-        this->tetris->socket->send(strstr.str());
-    });
+}
+
+void Game::sendFrameData() {
+    std::stringstream strstr;
+    strstr << binw((unsigned char) 0) << binw(gameLogic.frameCount) << binw(inputData);
+    this->tetris->socket->send(strstr.str());
 }
 
 void Game::update() {
     SDLInputAdapter::get()->update();
-
-    std::stringstream strstr;
-    strstr << binw((unsigned char) 1) << gameLogic.frameCount;
-    this->tetris->socket->send(strstr.str());
-
-    gameLogic.update();
-    virtualAdapter.update(GameLogic::Key::INSTA_DROP, false);
+    sendFrameData();
+    gameLogic.update(inputData);
+    inputData.update(GameLogic::Key::INSTA_DROP, false);
     render();
 }
 

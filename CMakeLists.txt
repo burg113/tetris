@@ -22,7 +22,11 @@ add_executable(tetris
         src/application/client/Tetris.cpp
 
         examples/Networking.cpp
-        src/networking/BinarySerialize.cpp src/networking/SocketWrapper.cpp src/networking/Server.cpp src/application/server/MirrorServer.cpp)
+        src/networking/BinarySerialize.cpp
+        src/networking/SocketWrapper.cpp
+        src/networking/Server.cpp
+        src/application/server/MirrorServer.cpp
+        src/application/io/input/InputData.cpp)
 
 include_directories(
         lib/asio/asio/include

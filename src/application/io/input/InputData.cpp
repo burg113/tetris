@@ -9,6 +9,18 @@ std::ostream &operator<<(std::ostream &s, binary_write_t<InputData> inputAdapter
     return s;
 }
 
+InputData::InputData(int size) {
+    keys.resize(size);
+}
+
+bool InputData::isDown(int keyCode) const {
+    return keys[keyCode];
+}
+
+void InputData::update(int keyCode, bool state) {
+    keys[keyCode] = state;
+}
+
 std::istream &operator>>(std::istream &s, binary_read_t<InputData> inputAdapter){
     s >> binr(inputAdapter.t.keys);
     return s;

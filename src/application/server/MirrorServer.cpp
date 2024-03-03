@@ -7,30 +7,29 @@
 #include "application/io/input/SDLInputAdapter.h"
 #include <thread>
 
-MirrorServer::MirrorServer(ServerHelper *server, Window *window) : server(server), window(window),
-                                                                   inputAdapter(GameLogic::Key::SIZE) {
+MirrorServer::MirrorServer(ServerHelper *server, Window *window) : server(server), window(window) {
     server->addConnectCallback([this](SocketWrapper *socket) {
         updateGame = true;
         socket->addReadCallback([this](SocketWrapper *socket, const std::string &data) {
             handleSocketRead(socket, data);
         });
     });
-    game.setInputAdapter(&inputAdapter);
 }
 
 void MirrorServer::handleSocketRead(SocketWrapper *socket, const std::string &data) {
     std::stringstream strstr(data);
-    int key;
-    bool set;
     unsigned char info;
     strstr >> binr(info);
     if (info == 0) {
-        strstr >> binr(key) >> binr(set);
-        inputAdapter.update(key, set);
-    }
-    if (info == 1) {
-        game.update();
+        int frameCount;
+        InputData inputData;
+        strstr >> binr(frameCount) >> binr(inputData);
+        game.update(inputData);
         render();
+    }
+    else{
+        std::cerr << "Invalid info flag " << (int)info << std::endl;
+        assert(false);
     }
 }
 

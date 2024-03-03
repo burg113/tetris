@@ -8,6 +8,7 @@
 #include "application/io/input/InputAdapter.h"
 #include "application/client/state/game/Board.h"
 #include "utils/Vec2.h"
+#include "application/io/input/InputData.h"
 
 
 class GameLogic {
@@ -53,7 +54,6 @@ private:
 
     Piece oPiece = Piece({Vec2(0, 0), Vec2(1, 0), Vec2(0, -1), Vec2(1, -1)}, 2, 6);
 
-    InputAdapter *inputAdapter = nullptr;
 
     int holdFrameCooldown = 5;
     int inpL = -1, inpR = -1;
@@ -69,9 +69,7 @@ private:
     bool checkPos(Vec2 pos, Piece &piece, int rotation);
 
     bool checkPos(Vec2 pos);
-    void handleInput();
-
-    void handleInputCallback(bool b, int input);
+    void handleInput(const InputData& inputData);
 
     void lockPiece();
 
@@ -103,9 +101,8 @@ public:
     };
 
     GameLogic();
-    void setInputAdapter(InputAdapter* inputAdapter);
 
-    void update();
+    void update(const InputData& inputData);
 };
 
 
