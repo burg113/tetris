@@ -11,6 +11,8 @@
 #include <deque>
 #include <set>
 #include <functional>
+#include "networking/BinarySerialize.h"
+
 
 // should be unique
 class InputAdapter {
@@ -38,6 +40,9 @@ public:
     void registerExitCallback(std::function<void()> callbacks);
 
     bool quit();
+
+    friend std::ostream& operator << (std::ostream &s, binary_write_t<InputAdapter> inputAdapter);
+    friend std::istream& operator >> (std::istream &s, binary_read_t<InputAdapter> inputAdapter);
 };
 
 
