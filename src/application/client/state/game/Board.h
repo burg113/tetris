@@ -43,8 +43,8 @@ public:
     };
 
 
-    friend std::ostream& operator << (std::ostream &s, binary_write_t<Board> b);
-    friend std::istream& operator >> (std::istream &s, binary_read_t<Board> b);
+    friend BinaryStream& operator << (BinaryStream &s, const Board& b);
+    friend BinaryStream& operator >> (BinaryStream &s, Board& b);
 };
 
 

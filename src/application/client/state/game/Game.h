@@ -12,7 +12,6 @@
 #include "application/io/input/VirtualInputAdapter.h"
 
 class Game : public ApplicationState{
-    std::mutex gameLogicMutex;
     GameLogic gameLogic;
 
     bool smoothAnimation = true;

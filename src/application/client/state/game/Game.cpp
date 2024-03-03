@@ -16,10 +16,10 @@ Game::Game(Tetris *tetris) : tetris(tetris), inputData((int) GameLogic::Key::SIZ
     });
 
     tetris->socket->addReadCallback([this](SocketWrapper* socket, const std::string& s){
-        std::stringstream stream(s);
+        BinaryStream stream(s);
 
         int frameC = gameLogic.frameCount;
-        stream >> binr(this->gameLogic);
+        stream >> this->gameLogic;
 
         while (!inputHistory.empty() && inputHistory.front().first < gameLogic.frameCount) inputHistory.pop_front();
 
@@ -30,9 +30,9 @@ Game::Game(Tetris *tetris) : tetris(tetris), inputData((int) GameLogic::Key::SIZ
 }
 
 void Game::sendFrameData() {
-    std::stringstream strstr;
-    strstr << binw((unsigned char) 0) << binw(gameLogic.frameCount) << binw(inputData);
-    tetris->socket->send(strstr.str());
+    BinaryStream stream;
+    stream << ((unsigned char) 0) << gameLogic.frameCount << inputData;
+    tetris->socket->send(stream.getData());
 }
 
 void Game::update() {

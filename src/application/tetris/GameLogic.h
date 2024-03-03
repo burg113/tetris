@@ -106,8 +106,8 @@ public:
 
     void update(const InputData& inputData);
 
-    friend std::ostream& operator << (std::ostream &s, binary_write_t<GameLogic> gameLogic);
-    friend std::istream& operator >> (std::istream &s, binary_read_t<GameLogic> gameLogic);
+    friend BinaryStream& operator << (BinaryStream &s, const GameLogic& gameLogic);
+    friend BinaryStream& operator >> (BinaryStream &s, GameLogic& gameLogic);
 };
 
 

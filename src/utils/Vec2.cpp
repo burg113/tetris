@@ -57,13 +57,13 @@ Vec2 Vec2::rot(int i) {
     return rotR();
 }
 
-std::ostream &operator<<(std::ostream &s, binary_write_t<Vec2> vec) {
-    s << binw(vec.t.x) << binw(vec.t.y);
+BinaryStream &operator<<(BinaryStream &s, const Vec2& vec) {
+    s << vec.x << vec.y;
     return s;
 }
 
-std::istream &operator>>(std::istream &s, binary_read_t<Vec2> vec) {
-    s >> binr(vec.t.x) >> binr(vec.t.y);
+BinaryStream &operator>>(BinaryStream &s, Vec2& vec) {
+    s >> vec.x >> vec.y;
     return s;
 }
 

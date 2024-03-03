@@ -22,84 +22,112 @@ uint64_t ntohll(uint64_t x)
 #endif
 }
 
-std::ostream& operator << (std::ostream &s, binary_write_t<uint8_t> b){
-    return s.write(reinterpret_cast<const char*>(&b.t), sizeof(b.t));
-}
-std::ostream& operator << (std::ostream &s, binary_write_t<uint16_t> b){
-    uint16_t x = htons(b.t);
-    return s.write(reinterpret_cast<const char*>(&x), sizeof(x));
-}
-std::ostream& operator << (std::ostream &s, binary_write_t<uint32_t> b){
-    uint32_t x = htonl(b.t);
-    return s.write(reinterpret_cast<char*>(&x), sizeof(x));
-}
-std::ostream& operator << (std::ostream &s, binary_write_t<uint64_t> b){
-    uint64_t x = htonll(b.t);
-    return s.write(reinterpret_cast<char*>(&x), sizeof(x));
-}
-
-std::ostream& operator << (std::ostream &s, binary_write_t<int8_t> b){
-    return s.write(reinterpret_cast<const char*>(&b.t), sizeof(b.t));
-}
-std::ostream& operator << (std::ostream &s, binary_write_t<int16_t> b){
-    uint16_t x = htons(static_cast<uint16_t>(b.t));
-    return s.write(reinterpret_cast<const char*>(&x), sizeof(x));
-}
-std::ostream& operator << (std::ostream &s, binary_write_t<int32_t> b){
-    uint32_t x = htonl(static_cast<uint32_t>(b.t));
-    return s.write(reinterpret_cast<char*>(&x), sizeof(x));
-}
-std::ostream& operator << (std::ostream &s, binary_write_t<int64_t> b){
-    uint64_t x = htonll(static_cast<uint64_t>(b.t));
-    return s.write(reinterpret_cast<char*>(&x), sizeof(x));
-}
-std::ostream& operator << (std::ostream &s, binary_write_t<bool> b){
-    return s << binw<uint8_t>(b.t);
-}
-
-std::istream& operator >> (std::istream &s, binary_read_t<uint8_t> b) {
-    return s.read(reinterpret_cast<char*>(&b.t), sizeof(b.t));
-}
-std::istream& operator >> (std::istream &s, binary_read_t<uint16_t> b) {
-    auto &ret = s.read(reinterpret_cast<char*>(&b.t), sizeof(b.t));
-    b.t = ntohs(b.t);
-    return ret;
-}
-std::istream& operator >> (std::istream &s, binary_read_t<uint32_t> b) {
-    auto &ret = s.read(reinterpret_cast<char*>(&b.t), sizeof(b.t));
-    b.t = ntohl(b.t);
-    return ret;
-}
-std::istream& operator >> (std::istream &s, binary_read_t<uint64_t> b) {
-    auto &ret = s.read(reinterpret_cast<char*>(&b.t), sizeof(b.t));
-    b.t = ntohll(b.t);
-    return ret;
-}
-
-std::istream& operator >> (std::istream &s, binary_read_t<int8_t> b) {
-    return s.read(reinterpret_cast<char*>(&b.t), sizeof(b.t));
-}
-std::istream& operator >> (std::istream &s, binary_read_t<int16_t> b) {
-    uint16_t x;
-    auto &ret = s.read(reinterpret_cast<char*>(&x), sizeof(x));
-    b.t = static_cast<int16_t>(ntohs(x));
-    return ret;
-}
-std::istream& operator >> (std::istream &s, binary_read_t<int32_t> b) {
-    uint32_t x;
-    auto &ret = s.read(reinterpret_cast<char*>(&x), sizeof(x));
-    b.t = static_cast<int32_t>(ntohl(x));
-    return ret;
-}
-std::istream& operator >> (std::istream &s, binary_read_t<int64_t> b) {
-    uint64_t x;
-    auto &ret = s.read(reinterpret_cast<char*>(&x), sizeof(x));
-    b.t = static_cast<int64_t>(ntohll(x));
-    return ret;
-}
-std::istream& operator >> (std::istream &s, binary_read_t<bool> b){
-    uint8_t x;
-    s >> binr(x);
-    b.t = static_cast<bool>(x);
+BinaryStream& operator << (BinaryStream &s, const uint8_t& b){
+    s.getStringStream().write(reinterpret_cast<const char*>(&b), sizeof(b));
     return s;
+}
+BinaryStream& operator << (BinaryStream &s, const uint16_t& b){
+    uint16_t x = htons(b);
+    s.getStringStream().write(reinterpret_cast<const char*>(&x), sizeof(x));
+    return s;
+}
+BinaryStream& operator << (BinaryStream &s, const uint32_t& b){
+    uint32_t x = htonl(b);
+    s.getStringStream().write(reinterpret_cast<char*>(&x), sizeof(x));
+    return s;
+}
+BinaryStream& operator << (BinaryStream &s, const uint64_t& b){
+    uint64_t x = htonll(b);
+    s.getStringStream().write(reinterpret_cast<char*>(&x), sizeof(x));
+    return s;
+}
+
+BinaryStream& operator << (BinaryStream &s, const int8_t& b){
+    s.getStringStream().write(reinterpret_cast<const char*>(&b), sizeof(b));
+    return s;
+}
+BinaryStream& operator << (BinaryStream &s, const int16_t& b){
+    uint16_t x = htons(static_cast<uint16_t>(b));
+    s.getStringStream().write(reinterpret_cast<const char*>(&x), sizeof(x));
+    return s;
+}
+BinaryStream& operator << (BinaryStream &s, const int32_t& b){
+    uint32_t x = htonl(static_cast<uint32_t>(b));
+    s.getStringStream().write(reinterpret_cast<char*>(&x), sizeof(x));
+    return s;
+}
+BinaryStream& operator << (BinaryStream &s, const int64_t& b){
+    uint64_t x = htonll(static_cast<uint64_t>(b));
+    s.getStringStream().write(reinterpret_cast<char*>(&x), sizeof(x));
+    return s;
+}
+BinaryStream& operator << (BinaryStream &s, const bool& b){
+    s << (uint8_t)b;
+    return s;
+}
+
+BinaryStream& operator >> (BinaryStream &s, uint8_t& b) {
+    s.getStringStream().read(reinterpret_cast<char*>(&b), sizeof(b));
+    return s;
+}
+BinaryStream& operator >> (BinaryStream &s, uint16_t& b) {
+    s.getStringStream().read(reinterpret_cast<char*>(&b), sizeof(b));
+    b = ntohs(b);
+    return s;
+}
+BinaryStream& operator >> (BinaryStream &s, uint32_t& b) {
+    s.getStringStream().read(reinterpret_cast<char*>(&b), sizeof(b));
+    b = ntohl(b);
+    return s;
+}
+BinaryStream& operator >> (BinaryStream &s, uint64_t& b) {
+    s.getStringStream().read(reinterpret_cast<char*>(&b), sizeof(b));
+    b = ntohll(b);
+    return s;
+}
+
+BinaryStream& operator >> (BinaryStream &s, int8_t& b) {
+    s.getStringStream().read(reinterpret_cast<char*>(&b), sizeof(b));
+    return s;
+}
+BinaryStream& operator >> (BinaryStream &s, int16_t& b) {
+    uint16_t x;
+    s.getStringStream().read(reinterpret_cast<char*>(&x), sizeof(x));
+    b = static_cast<int16_t>(ntohs(x));
+    return s;
+}
+BinaryStream& operator >> (BinaryStream &s, int32_t& b) {
+    uint32_t x;
+    s.getStringStream().read(reinterpret_cast<char*>(&x), sizeof(x));
+    b = static_cast<int32_t>(ntohl(x));
+    return s;
+}
+BinaryStream& operator >> (BinaryStream &s, int64_t& b) {
+    uint64_t x;
+    s.getStringStream().read(reinterpret_cast<char*>(&x), sizeof(x));
+    b = static_cast<int64_t>(ntohll(x));
+    return s;
+}
+BinaryStream& operator >> (BinaryStream &s, bool& b){
+    uint8_t x;
+    s >> x;
+    b = static_cast<bool>(x);
+    return s;
+}
+
+std::string BinaryStream::getData() {
+    return stream.str();
+}
+
+std::stringstream &BinaryStream::getStringStream() {
+    return stream;
+}
+
+BinaryStream::BinaryStream(const std::string &data) : stream(data) {
+
+}
+
+void BinaryStream::reset(const std::string &data) {
+    stream.str(data);
+    stream.clear();
 }

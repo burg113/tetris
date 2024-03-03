@@ -9,13 +9,13 @@ void onReadServer(SocketWrapper* socket, const std::string &data) {
     std::cout << "Socket " << socket->getId() << " received input." << std::endl;
     std::cout << "Data: " << data.size() << " " << data << std::endl;
     std::vector<short> vec;
-    std::stringstream strstr(data);
-    strstr >> binr(vec);
+    BinaryStream streamIn(data);
+    streamIn >> vec;
     int sum = 0;
     for(short x : vec) sum += x;
-    std::stringstream out;
-    out << binw(sum);
-    socket->send(out.str());
+    BinaryStream streamOut;
+    streamOut << sum;
+    socket->send(streamOut.getData());
     std::cout << "Sent" << std::endl;
 }
 
@@ -31,8 +31,8 @@ void onConnectServer(SocketWrapper* socket) {
 
 void onReadClient(SocketWrapper* socket, const std::string &data) {
     int sum = 0;
-    std::stringstream strstr(data);
-    strstr >> binr(sum);
+    BinaryStream stream(data);
+    stream >> sum;
     std::cout << "Client received data: " << sum << std::endl;
 }
 
@@ -45,9 +45,9 @@ void startClient() {
     for(int it = 0; it < 5; it++){
         std::vector<short> vec;
         for(short s = 0; s < 199; s++) vec.push_back(s);
-        std::stringstream strstr;
-        strstr << binw(vec);
-        clientSocket.send(strstr.str());
+        BinaryStream stream;
+        stream << vec;
+        clientSocket.send(stream.getData());
     }
     std::this_thread::sleep_for(std::chrono::milliseconds(3000));
     clientSocket.startListening();

@@ -4,8 +4,8 @@
 
 #include "InputData.h"
 
-std::ostream &operator<<(std::ostream &s, binary_write_t<InputData> inputAdapter) {
-    s << binw(inputAdapter.t.keys);
+BinaryStream &operator<<(BinaryStream &s, const InputData& inputData) {
+    s << inputData.keys;
     return s;
 }
 
@@ -21,7 +21,7 @@ void InputData::update(int keyCode, bool state) {
     keys[keyCode] = state;
 }
 
-std::istream &operator>>(std::istream &s, binary_read_t<InputData> inputAdapter){
-    s >> binr(inputAdapter.t.keys);
+BinaryStream &operator>>(BinaryStream &s, InputData& inputData){
+    s >> inputData.keys;
     return s;
 }

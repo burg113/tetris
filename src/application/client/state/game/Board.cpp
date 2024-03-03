@@ -79,13 +79,13 @@ void Board::update() {
 
 }
 
-std::ostream &operator<<(ostream &s, binary_write_t<Board> b) {
-    s << binw(b.t.board);
+BinaryStream &operator<<(BinaryStream &s, const Board& b) {
+    s << b.board;
     return s;
 }
 
-std::istream &operator>>(istream &s, binary_read_t<Board> b) {
-    s >> binr(b.t.board);
+BinaryStream &operator>>(BinaryStream &s, Board& b) {
+    s >> b.board;
     return s;
 }
 

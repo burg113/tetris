@@ -154,21 +154,17 @@ bool GameLogic::tryRotate(bool clockwise) {
     return false;
 }
 
-std::ostream &operator<<(std::ostream &s, binary_write_t<GameLogic> gameLogic) {
-    auto &g = gameLogic.t;
-    s << binw(g.board)
-      << binw(g.inpL) << binw(g.inpR) << binw(g.inpRl) << binw(g.inpRr)
-      << binw(g.frameCount) << binw(g.framesToFall) << binw(g.position) << binw(g.rotation) << binw(g.pieceInd);
-
+BinaryStream &operator<<(BinaryStream &s, const GameLogic& gameLogic) {
+    const auto &g = gameLogic;
+    s << g.board << g.inpL << g.inpR << g.inpRl << g.inpRr
+      << g.frameCount << g.framesToFall << g.position << g.rotation << g.pieceInd;
     return s;
 }
 
-std::istream &operator>>(std::istream &s, binary_read_t<GameLogic> gameLogic) {
-    auto &g = gameLogic.t;
-    s >> binr(g.board)
-      >> binr(g.inpL) >> binr(g.inpR) >> binr(g.inpRl) >> binr(g.inpRr)
-      >> binr(g.frameCount) >> binr(g.framesToFall) >> binr(g.position) >> binr(g.rotation) >> binr(g.pieceInd);
-
+BinaryStream &operator>>(BinaryStream &s, GameLogic& gameLogic) {
+    auto &g = gameLogic;
+    s >> g.board >> g.inpL >> g.inpR >> g.inpRl >> g.inpRr
+      >> g.frameCount >> g.framesToFall >> g.position >> g.rotation >> g.pieceInd;
     return s;
 }
 

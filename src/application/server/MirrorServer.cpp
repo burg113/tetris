@@ -17,19 +17,19 @@ MirrorServer::MirrorServer(ServerHelper *server, Window *window) : server(server
 }
 
 void MirrorServer::handleSocketRead(SocketWrapper *socket, const std::string &data) {
-    std::stringstream strstr(data);
+    BinaryStream stream(data);
     unsigned char info;
-    strstr >> binr(info);
+    stream >> info;
     if (info == 0) {
         int frameCount;
         InputData inputData;
-        strstr >> binr(frameCount) >> binr(inputData);
+        stream >> frameCount >> inputData;
         game.update(inputData);
 
         // respond with game state after input
-        std::stringstream stream;
-        stream << binw(game);
-        socket->send(stream.str());
+        stream.reset();
+        stream << game;
+        socket->send(stream.getData());
 
         render();
     }

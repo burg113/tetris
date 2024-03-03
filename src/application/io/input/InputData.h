@@ -21,8 +21,8 @@ public:
 
     void update(int keyCode,bool state);
 
-    friend std::ostream& operator << (std::ostream &s, binary_write_t<InputData> inputAdapter);
-    friend std::istream& operator >> (std::istream &s, binary_read_t<InputData> inputAdapter);
+    friend BinaryStream& operator << (BinaryStream &s, const InputData& inputAdapter);
+    friend BinaryStream& operator >> (BinaryStream &s, InputData& inputAdapter);
 };
 
 

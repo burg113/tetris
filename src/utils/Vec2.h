@@ -36,8 +36,8 @@ public:
 
     Vec2 rot(int i);
 
-    friend std::ostream& operator << (std::ostream &s, binary_write_t<Vec2> vec);
-    friend std::istream& operator >> (std::istream &s, binary_read_t<Vec2> vec);
+    friend BinaryStream& operator << (BinaryStream &s, const Vec2& vec);
+    friend BinaryStream& operator >> (BinaryStream &s, Vec2& vec);
 };
 
 
