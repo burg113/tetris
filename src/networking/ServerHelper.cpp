@@ -2,6 +2,7 @@
 // Created by lucas on 09.12.2023.
 //
 
+#include "spdlog/spdlog.h"
 #include "ServerHelper.h"
 
 ServerHelper::ServerHelper(asio::io_service &ioService, short port) : ioService(ioService),
@@ -25,7 +26,7 @@ void ServerHelper::startAccepting() {
 
 void ServerHelper::handleAccept(SocketWrapper *newSocket, const asio::error_code &err) {
     if (err) {
-        std::cerr << "Socket acceptor received error " << err.value() << ": " << err.message() << std::endl;
+        SPDLOG_ERROR("Socket acceptor received error: {} {}", err.value(), err.message());
         newSocket->close();
         return;
     }

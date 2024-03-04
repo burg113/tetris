@@ -4,6 +4,7 @@
 
 
 #include <iostream>
+#include "spdlog/spdlog.h"
 #include "Board.h"
 
 using namespace std;
@@ -44,6 +45,19 @@ void Board::update() {
     }
 
 }
+
+std::vector<uint8_t>& Board::operator[](int ind) {
+    return board[ind];
+};
+
+uint8_t& Board::operator[](Vec2 vec) {
+    if (vec.x < 0 || vec.x >= width || vec.y < 0 || vec.y >= height) {
+        SPDLOG_WARN("invalid board position {} {}", vec.x, vec.y);
+        return voidO;
+    }
+    return board[vec.x][vec.y];
+};
+
 
 BinaryStream &operator<<(BinaryStream &s, const Board& b) {
     s << b.board;

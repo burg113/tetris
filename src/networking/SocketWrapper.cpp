@@ -2,6 +2,7 @@
 // Created by lucas on 09.12.2023.
 //
 
+#include "spdlog/spdlog.h"
 #include "SocketWrapper.h"
 
 int SocketWrapper::numSessions = 0;
@@ -30,20 +31,20 @@ void SocketWrapper::connect(const std::string &host, const std::string &service)
 }
 
 void SocketWrapper::startListening() {
-    std::cout << "Socket " << id << " started listening." << std::endl;
+    SPDLOG_INFO("Socket (id {}) started listening.", id);
     doReadSome();
 }
 
 void SocketWrapper::sendRaw(const std::string &str) {
     if(socket.is_open()) {
-        asio::async_write(socket, asio::buffer(str), [](const asio::error_code &e, std::size_t numBytes){
+        asio::async_write(socket, asio::buffer(str), [this](const asio::error_code &e, std::size_t numBytes){
             if(e){
-                std::cerr << "ERROR while writing to socket: " << e.message() << std::endl;
+                SPDLOG_ERROR("Couldn't write to socket (id {}): {} {}", this->id, e.value(), e.message());
             }
         });
     }
     else{
-        std::cerr << "WARNING: Attempt to write to closed socket " << getId() << std::endl;
+        SPDLOG_WARN("Attempt to write to closed socket (id {})", getId());
     }
 }
 
@@ -75,7 +76,7 @@ void SocketWrapper::close() {
         asio::error_code ec;
         socket.shutdown(asio::socket_base::shutdown_type::shutdown_both, ec);
         if(ec){
-            std::cerr << "ERROR during socket shutdown: " << ec.message() << std::endl;
+            SPDLOG_ERROR("error shutdown of socket (id {}): {} {}", id, ec.value(), ec.message());
         }
         socket.close();
         for (const SocketCloseCallback &callback : closeCallbacks) {
@@ -109,7 +110,7 @@ void SocketWrapper::appendData(const std::string &newData) {
 
 void SocketWrapper::handleRead(const asio::error_code &err, size_t numBytes) {
     if (err) {
-        std::cerr << "Socket " << id << " received error " << err.value() << ": " << err.message() << std::endl;
+        SPDLOG_ERROR("Error while reading from socket (id {}): {} {}", id, err.value(), err.message());
         close();
         return;
     }

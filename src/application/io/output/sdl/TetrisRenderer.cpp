@@ -3,6 +3,7 @@
 //
 
 #include <cassert>
+#include "spdlog/spdlog.h"
 #include "TextureRenderer.h"
 
 const std::vector<SDL_Color> colors = {{20,  20,  200, 255},
@@ -15,7 +16,7 @@ const std::vector<SDL_Color> colors = {{20,  20,  200, 255},
 
 void draw(int x, int y, int dx, int dy, SDL_Color col, std::vector<uint8_t> &data) {
     if (dx < 0 || dy < 0 || x < 0 || y < 0 || x + dx >= TextureRenderer::width || y + dy >= TextureRenderer::height) {
-        std::cerr << "invalid position to draw: " << x << " " << y << "   " << dx << " " << dy << std::endl;
+        SPDLOG_WARN("invalid positions to draw: {] {} {} {}", x, y, dx, dy);
         return;
     }
 
@@ -33,12 +34,11 @@ void draw(int x, int y, int dx, int dy, SDL_Color col, std::vector<uint8_t> &dat
 
 void drawBorder(int x, int y, int dx, int dy, int w, SDL_Color col, std::vector<uint8_t> &data) {
     if (dx < 0 || dy < 0 || x < 0 || y < 0 || x + dx >= TextureRenderer::width || y + dy >= TextureRenderer::height) {
-        std::cerr << "invalid position to draw: " << x << " " << y << "   " << dx << " " << dy << std::endl;
+        SPDLOG_WARN("invalid positions to draw: {] {} {} {}", x, y, dx, dy);
         return;
     }
     if (w > dx || w > dy) {
-        std::cerr << "invalid width of boarder: " << w
-                  << "  on rectangle of dimensions" << dx << " " << dy << std::endl;
+        SPDLOG_WARN("invalid width of boarder: {} on rectangle of dimensions {} {}", w, dx, dy);
         return;
     }
 

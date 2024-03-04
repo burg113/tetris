@@ -5,6 +5,7 @@
 #include <chrono>
 #include <thread>
 #include <iostream>
+#include "spdlog/spdlog.h"
 #include "Tetris.h"
 
 #include "state/ApplicationState.h"
@@ -21,8 +22,8 @@ void Tetris::play() {
                 t1 - std::chrono::high_resolution_clock::now()).count() + (int) 1e6 / FRAMERATE> 0)
             continue;
 
-//        std::cerr << "Frame took: " << (int) std::chrono::duration_cast<std::chrono::milliseconds>(
-//                std::chrono::high_resolution_clock::now() - t1).count() << " ms"<<std::endl;
+        SPDLOG_TRACE("Frame took: {} ms", (int) std::chrono::duration_cast<std::chrono::milliseconds>(
+                std::chrono::high_resolution_clock::now() - t1).count());
 
         t1 = std::chrono::high_resolution_clock::now();
         frameCount++;
@@ -40,7 +41,7 @@ void Tetris::play() {
 
 void Tetris::update() {
     if (state.empty()) {
-        std::cerr << "Fatal Error! GameLogic has lost state. Restarting.";
+        SPDLOG_CRITICAL("Fatal Error! GameLogic has lost state. Restarting.");
         reset();
         return;
     }
@@ -69,7 +70,7 @@ void Tetris::gotoState(StateEnum s) {
 
 [[maybe_unused]] void Tetris::popStateStack() {
     if (state.empty()) {
-        std::cerr << "Cannot pop state. ApplicationState stack is already empty!"<<std::endl;
+        SPDLOG_WARN("Cannot pop state. ApplicationState stack is already empty!");
         return;
     }
     state.pop();

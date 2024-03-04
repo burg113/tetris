@@ -28,16 +28,8 @@ public:
     void update();      // clears lines
 
 
-    std::vector<uint8_t>& operator[](int ind) {
-        return board[ind];
-    };
-    uint8_t& operator[](Vec2 vec) {
-        if (vec.x < 0 || vec.x >= width || vec.y < 0 || vec.y >= height) {
-            std::cerr << "invalid board position " << vec.x << " " << vec.y << std::endl;
-            return voidO;
-        }
-        return board[vec.x][vec.y];
-    };
+    std::vector<uint8_t>& operator[](int ind);
+    uint8_t& operator[](Vec2 vec);
 
 
     friend BinaryStream& operator << (BinaryStream &s, const Board& b);

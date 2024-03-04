@@ -55,3 +55,8 @@ endif()
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 target_link_libraries(tetris ${SDL2_LIBRARIES})
+
+find_package(spdlog REQUIRED)
+target_link_libraries(tetris spdlog::spdlog)
+
+add_compile_definitions(SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_TRACE)

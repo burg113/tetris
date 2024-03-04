@@ -3,6 +3,7 @@
 //
 #include <bits/stdc++.h>
 #include "Window.h"
+#include "spdlog/spdlog.h"
 // delay for closing
 #define DELAY 100       // ms
 
@@ -17,7 +18,7 @@ Window::Window(int width, int height, const std::string &title) : width(width), 
     * Returns 0 on success or a negative error code on failure using SDL_GetError().
     */
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        std::cerr << "SDL failed to initialise: " << SDL_GetError() << "\n";
+        SPDLOG_CRITICAL("SDL failed to initialise: {}", SDL_GetError());
         return;
     }
 
@@ -31,7 +32,7 @@ Window::Window(int width, int height, const std::string &title) : width(width), 
 
     /* Checks if window has been created; if not, exits program */
     if (window == NULL) {
-        std::cerr << "SDL window failed to initialise: " << SDL_GetError() << "\n";
+        SPDLOG_CRITICAL("SDL window failed to initialise: {}", SDL_GetError());
         return;
     }
     valid = true;
@@ -64,14 +65,13 @@ Window::~Window() {
 
 
 int Window::registerTexture(SDL_Texture *texture,const SDL_Rect *srcRect, const SDL_Rect *dstRect) {
-    if (renderObjects.count(IDCount)) std::cerr << "texture with index was already present and could not be added\n";
+    if (renderObjects.count(IDCount)) SPDLOG_ERROR("texture with index {} was already present and could not be added", IDCount);
     renderObjects.insert({IDCount,RenderObject{texture, srcRect, dstRect}});
     return IDCount++;
 }
 
 void Window::removeTexture(int ind) {
     if (renderObjects.count(ind)) renderObjects.erase(ind);
-    else
-        std::cerr << "tried to remove texture with index " << ind << " that is not present.\n";
+    else SPDLOG_WARN("tried to remove texture with index {} that is not present.", ind);
 }
 

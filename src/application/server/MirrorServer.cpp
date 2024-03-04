@@ -2,6 +2,7 @@
 // Created by lucas on 16.12.2023.
 //
 
+#include "spdlog/spdlog.h"
 #include "MirrorServer.h"
 #include "networking/BinarySerialize.h"
 #include "application/io/input/SDLInputAdapter.h"
@@ -33,7 +34,8 @@ void MirrorServer::handleSocketRead(SocketWrapper *socket, const std::string &da
         render();
     }
     else{
-        std::cerr << "Invalid info flag " << (int)info << std::endl;
+
+        SPDLOG_ERROR("Invalid info flag {}", (int)info);
         assert(false);
     }
 }
@@ -50,8 +52,8 @@ void MirrorServer::run() {
                 t1 - std::chrono::high_resolution_clock::now()).count() + (int) 1e6 / FRAMERATE > 0)
             continue;
 
-        std::cerr << "Frame took: " << (int) std::chrono::duration_cast<std::chrono::milliseconds>(
-                std::chrono::high_resolution_clock::now() - t1).count() << " ms" << std::endl;
+        SPDLOG_TRACE("Frame took: {} ms", (int) std::chrono::duration_cast<std::chrono::milliseconds>(
+                std::chrono::high_resolution_clock::now() - t1).count());
 
         t1 = std::chrono::high_resolution_clock::now();
         frameCount++;
