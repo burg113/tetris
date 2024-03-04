@@ -1,10 +1,10 @@
 //
 // Created by Burg on 08.12.2023.
 //
+#pragma once
+
 
 #include <SDL.h>
-#ifndef TETRIS_WINDOW_H
-#define TETRIS_WINDOW_H
 #include <vector>
 #include <map>
 
@@ -35,10 +35,6 @@ public:
     bool valid = false;
     Window(int width,int height, const std::string &title);
 
-    void draw(SDL_Texture *texture);
-    void draw(int x, int y, int dx, int dy, SDL_Color);
-    void drawBorder(int x, int y, int dx, int dy, int width, SDL_Color);
-
     // returns ID
     int registerTexture(SDL_Texture* texture,const SDL_Rect *srcRect, const SDL_Rect *dstRect);
     void removeTexture(int ind);
@@ -52,5 +48,3 @@ public:
 
 };
 
-
-#endif //TETRIS_WINDOW_H

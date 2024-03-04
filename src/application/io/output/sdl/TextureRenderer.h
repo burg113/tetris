@@ -2,8 +2,7 @@
 // Created by Burg on 04.03.2024.
 //
 
-#ifndef TETRIS_TEXTURERENDERER_H
-#define TETRIS_TEXTURERENDERER_H
+#pragma once
 
 #include <SDL.h>
 #include "application/tetris/GameLogic.h"
@@ -24,5 +23,3 @@ public:
 
 };
 
-
-#endif //TETRIS_TEXTURERENDERER_H

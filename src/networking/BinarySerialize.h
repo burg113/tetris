@@ -2,8 +2,7 @@
 // Created by lucas on 09.12.2023.
 //
 
-#ifndef TETRIS_BINARYSERIALIZE_H
-#define TETRIS_BINARYSERIALIZE_H
+#pragma once
 
 #include <cstdint>
 #include <type_traits>
@@ -74,5 +73,3 @@ BinaryStream& operator >> (BinaryStream &s, std::vector<T>& b) {
     }
     return s;
 }
-
-#endif //TETRIS_BINARYSERIALIZE_H

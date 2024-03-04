@@ -2,8 +2,7 @@
 // Created by Burg on 16.12.2023.
 //
 
-#ifndef TETRIS_GAME_H
-#define TETRIS_GAME_H
+#pragma once
 
 #include "application/client/state/ApplicationState.h"
 #include "application/client/Tetris.h"
@@ -50,5 +49,3 @@ public:
 
 };
 
-
-#endif //TETRIS_GAME_H

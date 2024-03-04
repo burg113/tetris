@@ -2,8 +2,8 @@
 // Created by Burg on 08.12.2023.
 //
 
-#ifndef TETRIS_BOARD_H
-#define TETRIS_BOARD_H
+#pragma once
+
 
 #include <vector>
 #include <iostream>
@@ -20,9 +20,6 @@ public:
     int width,height;
 
     Board(int w, int h);
-
-    std::vector<uint8_t> serialize();
-    void deserialize(std::vector<uint8_t> &data);
 
     void debug();
 
@@ -47,5 +44,3 @@ public:
     friend BinaryStream& operator >> (BinaryStream &s, Board& b);
 };
 
-
-#endif //TETRIS_BOARD_H

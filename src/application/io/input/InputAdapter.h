@@ -2,9 +2,7 @@
 // Created by Burg on 20.05.2023.
 //
 
-#ifndef NON_EUCLIDEAN_RENDER_KEYBOARDADAPTER_H
-#define NON_EUCLIDEAN_RENDER_KEYBOARDADAPTER_H
-
+#pragma once
 
 #include <map>
 #include <vector>
@@ -43,5 +41,3 @@ public:
 
 };
 
-
-#endif //NON_EUCLIDEAN_RENDER_KEYBOARDADAPTER_H

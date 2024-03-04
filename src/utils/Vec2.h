@@ -2,8 +2,7 @@
 // Created by Burg on 09.12.2023.
 //
 
-#ifndef TETRIS_VEC2_H
-#define TETRIS_VEC2_H
+#pragma once
 
 #include "networking/BinarySerialize.h"
 
@@ -40,5 +39,3 @@ public:
     friend BinaryStream& operator >> (BinaryStream &s, Vec2& vec);
 };
 
-
-#endif //TETRIS_VEC2_H

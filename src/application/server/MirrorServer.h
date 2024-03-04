@@ -2,8 +2,7 @@
 // Created by lucas on 16.12.2023.
 //
 
-#ifndef TETRIS_MIRRORSERVER_H
-#define TETRIS_MIRRORSERVER_H
+#pragma once
 
 #include "application/tetris/GameLogic.h"
 #include "networking/ServerHelper.h"
@@ -38,4 +37,3 @@ public:
 };
 
 
-#endif //TETRIS_MIRRORSERVER_H

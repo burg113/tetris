@@ -2,8 +2,7 @@
 // Created by Burg on 09.12.2023.
 //
 
-#ifndef TETRIS_GAMELOGIC_H
-#define TETRIS_GAMELOGIC_H
+#pragma once
 
 #include "application/io/input/InputAdapter.h"
 #include "application/client/state/game/Board.h"
@@ -112,4 +111,3 @@ public:
 };
 
 
-#endif //TETRIS_GAMELOGIC_H

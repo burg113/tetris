@@ -2,8 +2,7 @@
 // Created by Burg on 03.03.2024.
 //
 
-#ifndef TETRIS_INPUTDATA_H
-#define TETRIS_INPUTDATA_H
+#pragma once
 
 #include "vector"
 #include "networking/BinarySerialize.h"
@@ -25,5 +24,3 @@ public:
     friend BinaryStream& operator >> (BinaryStream &s, InputData& inputAdapter);
 };
 
-
-#endif //TETRIS_INPUTDATA_H

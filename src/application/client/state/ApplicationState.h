@@ -2,8 +2,7 @@
 // Created by Burg on 09.12.2023.
 //
 
-#ifndef TETRIS_APPLICATIONSTATE_H
-#define TETRIS_APPLICATIONSTATE_H
+#pragma once
 
 
 class ApplicationState {
@@ -14,5 +13,3 @@ public:
 
 };
 
-
-#endif //TETRIS_APPLICATIONSTATE_H

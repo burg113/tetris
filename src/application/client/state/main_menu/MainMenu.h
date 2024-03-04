@@ -2,8 +2,7 @@
 // Created by Burg on 09.12.2023.
 //
 
-#ifndef TETRIS_MAINMENU_H
-#define TETRIS_MAINMENU_H
+#pragma once
 
 #include "application/client/state/ApplicationState.h"
 #include "application/client/Tetris.h"
@@ -18,6 +17,3 @@ public:
 
     void update() override;
 };
-
-
-#endif //TETRIS_MAINMENU_H

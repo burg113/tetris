@@ -2,8 +2,7 @@
 // Created by lucas on 09.12.2023.
 //
 
-#ifndef TETRIS_SOCKETWRAPPER_H
-#define TETRIS_SOCKETWRAPPER_H
+#pragma once
 
 #ifdef _WIN32
     #include <winsock2.h>
@@ -74,4 +73,3 @@ private:
 };
 
 
-#endif //TETRIS_SOCKETWRAPPER_H

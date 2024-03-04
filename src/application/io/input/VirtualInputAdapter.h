@@ -2,8 +2,7 @@
 // Created by Burg on 16.12.2023.
 //
 
-#ifndef TETRIS_VIRTUALKEYBOARDADAPTER_H
-#define TETRIS_VIRTUALKEYBOARDADAPTER_H
+#pragma once
 
 #include "InputAdapter.h"
 
@@ -16,5 +15,3 @@ public:
 
 };
 
-
-#endif //TETRIS_VIRTUALKEYBOARDADAPTER_H

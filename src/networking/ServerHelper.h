@@ -2,8 +2,7 @@
 // Created by lucas on 09.12.2023.
 //
 
-#ifndef TETRIS_SERVERHELPER_H
-#define TETRIS_SERVERHELPER_H
+#pragma once
 
 #include "SocketWrapper.h"
 
@@ -30,4 +29,3 @@ private:
 };
 
 
-#endif //TETRIS_SERVERHELPER_H
