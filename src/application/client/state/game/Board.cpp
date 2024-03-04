@@ -12,40 +12,6 @@ Board::Board(int w, int h) : width(w), height(h) {
     reset();
 }
 
-vector<uint8_t> Board::serialize() {
-    vector<uint8_t> outBuff;
-    
-    outBuff.emplace_back(width);
-    outBuff.emplace_back(width >> 8);
-    outBuff.emplace_back(height);
-    outBuff.emplace_back(height >> 8);
-
-    outBuff.reserve(width * height);
-    for (vector<uint8_t> &col: board)
-        for (uint8_t b: col)
-            outBuff.emplace_back(b);
-    return outBuff;
-}
-
-void Board::deserialize(vector<uint8_t> &data) {
-    if (data.size() < 4) {
-        cerr << "To few bytes in data stream! Expected at least 4 but recived" << data.size() << endl;
-        return;
-    }
-    width = data[0] + (data[1] << 8);
-    height = data[2] + (data[3] << 8);
-    if (data.size() != width * height + 4) {
-        cerr << "Incorrect amount of bytes in data stream! Expected " << width * height + 4 << " but received "
-             << data.size() << endl;
-        return;
-    }
-    for (int x = 0; x < width; x++) {
-        for (int y = 0; y < height; y++) {
-            board[x][y] = data[y * height + x];
-        }
-    }
-}
-
 void Board::debug() {
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
