@@ -9,7 +9,6 @@ int SocketWrapper::numSessions = 0;
 SocketWrapper::SocketWrapper(asio::io_service &ioService)
         : socket(ioService), id(numSessions++), ioService(ioService) {
     len = 0;
-    alive = true;
 }
 
 void SocketWrapper::addReadCallback(const SocketReadCallback &callback) {
@@ -118,7 +117,7 @@ void SocketWrapper::handleRead(const asio::error_code &err, size_t numBytes) {
     for(int i = 0; i < newData.size(); i += APPEND_SIZE){
         appendData(newData.substr(i, APPEND_SIZE));
     }
-    if(alive) {
+    if(socket.is_open()) {
         doReadSome();
     }
 }
