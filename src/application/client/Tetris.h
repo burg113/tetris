@@ -2,8 +2,7 @@
 // Created by Burg on 08.12.2023.
 //
 
-#ifndef TETRIS_TETRIS_H
-#define TETRIS_TETRIS_H
+#pragma once
 
 #include <stack>
 #include <memory>
@@ -45,5 +44,3 @@ public:
 
 };
 
-
-#endif //TETRIS_TETRIS_H
