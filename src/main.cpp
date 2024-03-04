@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 
 #include <SDL.h>
-#include "application/io/Window.h"
+#include "application/io/output/sdl/Window.h"
 #include "application/client/Tetris.h"
 #include "application/io/input/SDLInputAdapter.h"
 

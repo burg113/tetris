@@ -49,35 +49,14 @@ Window::Window(int width, int height, const std::string &title) : width(width), 
 
 void Window::render() {
     SDL_RenderClear(sdlRenderer);
-    void *pixels;
-    int pitch;
-    SDL_LockTexture(buffer, NULL, &pixels, &pitch);
 
-    memcpy(pixels, data.data(), pitch * height);
-    data = std::vector<uint8_t>(width * height * 4, 0);
+    for(auto &[ind, obj] : renderObjects)
+        SDL_RenderCopy(sdlRenderer, obj.texture, obj.srcRect, obj.dstRect);
 
-    SDL_UnlockTexture(buffer);
-    SDL_RenderCopy(sdlRenderer, buffer, NULL, NULL);
     SDL_RenderPresent(sdlRenderer);
 }
 
-void Window::draw(int x, int y, int dx, int dy, SDL_Color col) {
-    if (dx < 0 || dy < 0 || x < 0 || y < 0 || x + dx >= width || y + dy >= height) {
-        std::cerr << "invalid position to draw: " << x << " " << y << "   " << dx << " " << dy << std::endl;
-        return;
-    }
 
-    std::vector<uint8_t> row;
-    for (int j = 0; j < dx; j++) {
-        row.emplace_back(col.a);
-        row.emplace_back(col.b);
-        row.emplace_back(col.g);
-        row.emplace_back(col.r);
-    }
-    for (int i = y; i < dy + y; i++) {
-        memcpy(data.data() + (i * width + x) * 4, row.data(), dx * 4);
-    }
-}
 
 Window::~Window() {
     /* Pauses all SDL subsystems for a variable amount of milliseconds */
@@ -88,35 +67,18 @@ Window::~Window() {
 
     /* Shuts down all SDL subsystems */
     SDL_Quit();
-
 }
 
-void Window::drawBorder(int x, int y, int dx, int dy, int w, SDL_Color col) {
-    if (dx < 0 || dy < 0 || x < 0 || y < 0 || x + dx >= width || y + dy >= height) {
-        std::cerr << "invalid position to draw: " << x << " " << y << "   " << dx << " " << dy << std::endl;
-        return;
-    }
-    if (w > dx || w > dy) {
-        std::cerr << "invalid width of boarder: " << w
-                  << "  on rectangle of dimensions" << dx << " " << dy << std::endl;
-        return;
-    }
 
-    std::vector<uint8_t> pixel = {col.a, col.b, col.g, col.r};
+int Window::registerTexture(SDL_Texture *texture,const SDL_Rect *srcRect, const SDL_Rect *dstRect) {
+    if (renderObjects.count(IDCount)) std::cerr << "texture with index was already present and could not be added\n";
+    renderObjects.insert({IDCount,RenderObject{texture, srcRect, dstRect}});
+    return IDCount++;
+}
 
-    for (int j = x; j < x + dx; j++) {
-        for (int i = 0; i < w; i++) {
-            memcpy(data.data() + ((y + i) * width + j) * 4, pixel.data(), 4);
-            memcpy(data.data() + ((y + dy - i-1) * width + j) * 4, pixel.data(), 4);
-        }
-    }
-    for (int j = y + w; j <= y + dy - w; j++) {
-        for (int i = 0; i < w; i++) {
-            memcpy(data.data() + (j * width + x + i) * 4, pixel.data(), 4);
-            memcpy(data.data() + (j * width + x + dx - i-1) * 4, pixel.data(), 4);
-        }
-    }
-
-
+void Window::removeTexture(int ind) {
+    if (renderObjects.count(ind)) renderObjects.erase(ind);
+    else
+        std::cerr << "tried to remove texture with index " << ind << " that is not present.\n";
 }
 

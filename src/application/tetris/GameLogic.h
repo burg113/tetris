@@ -10,7 +10,6 @@
 #include "utils/Vec2.h"
 #include "application/io/input/InputData.h"
 
-
 class GameLogic {
     friend class Game;
     friend class MirrorServer;
@@ -108,6 +107,8 @@ public:
 
     friend BinaryStream& operator << (BinaryStream &s, const GameLogic& gameLogic);
     friend BinaryStream& operator >> (BinaryStream &s, GameLogic& gameLogic);
+
+    friend class TextureRenderer;
 };
 
 

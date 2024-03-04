@@ -8,7 +8,9 @@ add_executable(tetris
 
         src/application/client/Tetris.cpp
         src/application/client/state/game/Board.cpp
-        src/application/io/Window.cpp
+
+        src/application/io/output/sdl/Window.cpp
+        src/application/io/output/sdl/TetrisRenderer.cpp
         src/application/io/input/InputAdapter.cpp
         src/application/io/input/VirtualInputAdapter.cpp
         src/application/io/input/SDLInputAdapter.cpp

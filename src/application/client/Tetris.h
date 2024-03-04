@@ -7,7 +7,7 @@
 
 #include <stack>
 #include <memory>
-#include "../io/Window.h"
+#include "application/io/output/sdl/Window.h"
 #include "../io/input/InputAdapter.h"
 #include "application/client/state/game/Board.h"
 #include "state/ApplicationState.h"

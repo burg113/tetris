@@ -14,12 +14,12 @@
 class Game : public ApplicationState{
     GameLogic gameLogic;
 
-    bool smoothAnimation = true;
-
     Tetris *tetris;
     InputData inputData;
 
     std::deque<std::pair<int,InputData>> inputHistory;
+
+    SDL_Texture *texture;
 
     SDL_Scancode KEY_INSTA_DROP = SDL_Scancode::SDL_SCANCODE_SPACE;
     SDL_Scancode KEY_FAST_FALL = SDL_Scancode::SDL_SCANCODE_LCTRL;
@@ -38,15 +38,6 @@ class Game : public ApplicationState{
 
     };
 
-    std::vector<SDL_Color> colors = {{20, 20, 200, 255},
-                                     {240, 180, 20, 255},
-                                     {15, 230, 15, 255},
-                                     {140, 20, 180, 255},
-                                     {200, 20, 20, 255},
-                                     {20, 200, 240, 255},
-                                     {215, 220, 0, 255}};
-
-    int boarderWidth = 3;
 
     void sendFrameData();
 

@@ -7,7 +7,7 @@
 #include "application/tetris/GameLogic.h"
 #include "networking/ServerHelper.h"
 #include "application/io/input/VirtualInputAdapter.h"
-#include "application/io/Window.h"
+#include "application/io/output/sdl/Window.h"
 
 class MultiplayerServer {
     int FRAMERATE = 60;

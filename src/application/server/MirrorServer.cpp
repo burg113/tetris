@@ -87,7 +87,7 @@ void MirrorServer::render() {
             else
                 col = {120, 120, 120, 255};
 
-            window->draw(upperCorner.x + size * x, upperCorner.y + size * y, size, size, col);
+            //todo: window->draw(upperCorner.x + size * x, upperCorner.y + size * y, size, size, col);
         }
     }
 
@@ -96,6 +96,6 @@ void MirrorServer::render() {
 
     for (Vec2 v: game.pieces[game.pieceInd].tiles) {
         Vec2 p = upperCorner + offset + (v.rot(game.rotation) + game.position) * size;
-        window->draw(p.x, p.y, size, size, colors[game.pieces[game.pieceInd].colorId]);
+        //todo: window->draw(p.x, p.y, size, size, colors[game.pieces[game.pieceInd].colorId]);
     }
 }
