@@ -28,7 +28,7 @@ void ServerHelper::startAccepting() {
 void ServerHelper::handleAccept(SocketWrapper *newSocket, const asio::error_code &err) {
     if (err) {
         std::cerr << "Socket acceptor received error " << err.value() << ": " << err.message() << std::endl;
-        newSocket->kill();
+        newSocket->close();
         return;
     }
     newSocket->startListening();

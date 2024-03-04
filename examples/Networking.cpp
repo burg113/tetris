@@ -26,7 +26,7 @@ void onKillServer(SocketWrapper* socket) {
 void onConnectServer(SocketWrapper* socket) {
     std::cout << "Socket " << socket->getId() << " connected!" << std::endl;
     socket->addReadCallback(onReadServer);
-    socket->addKillCallback(onKillServer);
+    socket->addCloseCallback(onKillServer);
 }
 
 void onReadClient(SocketWrapper* socket, const std::string &data) {

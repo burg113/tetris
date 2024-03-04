@@ -16,8 +16,8 @@ void SocketWrapper::addReadCallback(const SocketReadCallback &callback) {
     readCallbacks.push_back(callback);
 }
 
-void SocketWrapper::addKillCallback(const SocketKillCallback &callback) {
-    killCallbacks.push_back(callback);
+void SocketWrapper::addCloseCallback(const SocketCloseCallback &callback) {
+    closeCallbacks.push_back(callback);
 }
 
 void SocketWrapper::connectToIp(const asio::ip::address &ip, short port) {
@@ -36,7 +36,16 @@ void SocketWrapper::startListening() {
 }
 
 void SocketWrapper::sendRaw(const std::string &str) {
-    asio::write(socket, asio::buffer(str));
+    if(socket.is_open()) {
+        asio::async_write(socket, asio::buffer(str), [](const asio::error_code &e, std::size_t numBytes){
+            if(e){
+                std::cerr << "ERROR while writing to socket: " << e.message() << std::endl;
+            }
+        });
+    }
+    else{
+        std::cerr << "WARNING: Attempt to write to closed socket " << getId() << std::endl;
+    }
 }
 
 void SocketWrapper::send(const std::string &str) {
@@ -62,16 +71,15 @@ int SocketWrapper::getId() {
     return id;
 }
 
-bool SocketWrapper::isAlive() {
-    return alive;
-}
-
-void SocketWrapper::kill() {
-    if(alive) {
-        alive = false;
-        socket.shutdown(asio::socket_base::shutdown_type::shutdown_both);
+void SocketWrapper::close() {
+    if(socket.is_open()) {
+        asio::error_code ec;
+        socket.shutdown(asio::socket_base::shutdown_type::shutdown_both, ec);
+        if(ec){
+            std::cerr << "ERROR during socket shutdown: " << ec.message() << std::endl;
+        }
         socket.close();
-        for (const SocketKillCallback &callback : killCallbacks) {
+        for (const SocketCloseCallback &callback : closeCallbacks) {
             callback(this);
         }
     }
@@ -103,7 +111,7 @@ void SocketWrapper::appendData(std::string newData) {
 void SocketWrapper::handleRead(const asio::error_code &err, size_t numBytes) {
     if (err) {
         std::cerr << "Socket " << id << " received error " << err.value() << ": " << err.message() << std::endl;
-        kill();
+        close();
         return;
     }
     std::string newData = std::string(buf, buf + numBytes);

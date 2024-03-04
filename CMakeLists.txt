@@ -24,7 +24,7 @@ add_executable(tetris
         examples/Networking.cpp
         src/networking/BinarySerialize.cpp
         src/networking/SocketWrapper.cpp
-        src/networking/Server.cpp
+        src/networking/ServerHelper.cpp
         src/application/server/MirrorServer.cpp
         src/application/io/input/InputData.cpp)
 

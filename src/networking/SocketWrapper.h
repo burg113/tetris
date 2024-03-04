@@ -19,7 +19,7 @@ class SocketWrapper;
 
 using SocketConnectCallback = std::function<void(SocketWrapper*)>;
 using SocketReadCallback = std::function<void(SocketWrapper*, const std::string&)>;
-using SocketKillCallback = std::function<void(SocketWrapper*)>;
+using SocketCloseCallback = std::function<void(SocketWrapper*)>;
 
 class SocketWrapper {
 public:
@@ -28,7 +28,7 @@ public:
 
     void addReadCallback(const SocketReadCallback& callback);
 
-    void addKillCallback(const SocketKillCallback& callback);
+    void addCloseCallback(const SocketCloseCallback& callback);
 
     void connectToIp(const asio::ip::address& ip, short port);
 
@@ -47,9 +47,7 @@ public:
 
     int getId();
 
-    bool isAlive();
-
-    void kill();
+    void close();
 
 private:
     // The maximum amount of data which can be received at once
@@ -66,10 +64,9 @@ private:
     uint32_t len;
     std::string data;
     int id;
-    bool alive;
 
     std::vector<SocketReadCallback> readCallbacks;
-    std::vector<SocketKillCallback> killCallbacks;
+    std::vector<SocketCloseCallback> closeCallbacks;
 
     void appendData(std::string newData);
     void handleRead(const asio::error_code &err, size_t numBytes);
