@@ -1,16 +1,15 @@
 //
-// Created by lucas on 16.12.2023.
+// Created by lucpp on 04.03.24.
 //
 
-#ifndef TETRIS_MIRRORSERVER_H
-#define TETRIS_MIRRORSERVER_H
+#pragma once
 
 #include "application/tetris/GameLogic.h"
 #include "networking/ServerHelper.h"
 #include "application/io/input/VirtualInputAdapter.h"
 #include "application/io/Window.h"
 
-class MirrorServer {
+class MultiplayerServer {
     int FRAMERATE = 60;
 
     bool smoothAnimation = true;
@@ -24,7 +23,7 @@ class MirrorServer {
 
 public:
 
-    explicit MirrorServer(ServerHelper *server, Window *window);
+    explicit MultiplayerServer(ServerHelper *server, Window *window);
 
     void handleSocketRead(SocketWrapper *socket, const std::string &data);
 
@@ -34,8 +33,5 @@ public:
 
     ServerHelper *server;
     Window *window;
-    GameLogic game;
+    std::map<int, GameLogic> games;
 };
-
-
-#endif //TETRIS_MIRRORSERVER_H

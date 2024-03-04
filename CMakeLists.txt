@@ -26,7 +26,9 @@ add_executable(tetris
         src/networking/SocketWrapper.cpp
         src/networking/ServerHelper.cpp
         src/application/server/MirrorServer.cpp
-        src/application/io/input/InputData.cpp)
+        src/application/io/input/InputData.cpp
+        src/application/server/MultiplayerServer.cpp
+        src/application/server/MultiplayerServer.h)
 
 include_directories(
         lib/asio/asio/include

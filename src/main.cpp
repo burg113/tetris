@@ -9,6 +9,7 @@
 #include "networking/BinarySerialize.h"
 #include "networking/ServerHelper.h"
 #include "application/server/MirrorServer.h"
+#include "application/server/MultiplayerServer.h"
 
 /* Sets constants */
 #define WIDTH 800
@@ -122,8 +123,11 @@ int32_t main(int argc, char *argv[]) {
             asio::io_service ioService;
             ServerHelper server(ioService, 2024);
 
-            MirrorServer mirrorServer(&server, &window);
-            mirrorServer.run();
+//            MirrorServer mirrorServer(&server, &window);
+//            mirrorServer.run();
+
+            MultiplayerServer multiplayerServer(&server, &window);
+            multiplayerServer.run();
         }
 
 

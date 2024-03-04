@@ -9,7 +9,6 @@
 
 MirrorServer::MirrorServer(ServerHelper *server, Window *window) : server(server), window(window) {
     server->addConnectCallback([this](SocketWrapper *socket) {
-        updateGame = true;
         socket->addReadCallback([this](SocketWrapper *socket, const std::string &data) {
             handleSocketRead(socket, data);
         });
