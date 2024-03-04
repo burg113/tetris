@@ -9,7 +9,7 @@
 #include "application/io/input/VirtualInputAdapter.h"
 #include "application/io/output/sdl/Window.h"
 
-class MirrorServer {
+class [[maybe_unused]] MirrorServer {
     int FRAMERATE = 60;
 
     bool smoothAnimation = true;
@@ -23,7 +23,7 @@ class MirrorServer {
 
 public:
 
-    explicit MirrorServer(ServerHelper *server, Window *window);
+    [[maybe_unused]] explicit MirrorServer(ServerHelper *server, Window *window);
 
     void handleSocketRead(SocketWrapper *socket, const std::string &data);
 

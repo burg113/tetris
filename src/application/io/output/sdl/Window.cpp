@@ -7,7 +7,6 @@
 #define DELAY 100       // ms
 
 Window::Window(int width, int height, const std::string &title) : width(width), height(height) {
-    data = std::vector<uint8_t>(width * height * 4, 0);
 
     valid = false;
     /* Initialises data */
@@ -39,12 +38,6 @@ Window::Window(int width, int height, const std::string &title) : width(width), 
 
 
     sdlRenderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    buffer = SDL_CreateTexture(sdlRenderer,
-                               SDL_PIXELFORMAT_RGBA8888,
-                               SDL_TEXTUREACCESS_STREAMING,
-                               width,
-                               height);
-
 }
 
 void Window::render() {

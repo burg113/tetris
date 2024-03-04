@@ -84,7 +84,7 @@ void SocketWrapper::close() {
     }
 }
 
-void SocketWrapper::appendData(std::string newData) {
+void SocketWrapper::appendData(const std::string &newData) {
     uint32_t oldLen = data.size();
     data += newData;
     if (oldLen < 4 && 4 <= data.size()) {

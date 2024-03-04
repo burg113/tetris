@@ -67,7 +67,7 @@ private:
     std::vector<SocketReadCallback> readCallbacks;
     std::vector<SocketCloseCallback> closeCallbacks;
 
-    void appendData(std::string newData);
+    void appendData(const std::string &newData);
     void handleRead(const asio::error_code &err, size_t numBytes);
     void doReadSome();
 };

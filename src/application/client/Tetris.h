@@ -32,7 +32,7 @@ public:
 
     Tetris(Window *window, InputAdapter *inputAdapter, SocketWrapper *socket);
 
-    void popStateStack();
+    [[maybe_unused]] void popStateStack();
     void gotoState(StateEnum s);
 
 

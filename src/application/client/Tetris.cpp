@@ -67,7 +67,7 @@ void Tetris::gotoState(StateEnum s) {
     state.emplace(s);
 }
 
-void Tetris::popStateStack() {
+[[maybe_unused]] void Tetris::popStateStack() {
     if (state.empty()) {
         std::cerr << "Cannot pop state. ApplicationState stack is already empty!"<<std::endl;
         return;

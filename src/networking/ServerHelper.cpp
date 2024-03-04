@@ -4,8 +4,6 @@
 
 #include "ServerHelper.h"
 
-#include <utility>
-
 ServerHelper::ServerHelper(asio::io_service &ioService, short port) : ioService(ioService),
                                                                       acceptor(tcp::acceptor(ioService, tcp::endpoint(tcp::v4(), port))) {
 

@@ -32,10 +32,10 @@ public:
     virtual bool isDown(int keyCode);
 
     // callbacks will be called when a keypress/ depress is detected
-    void registerCallback(std::function<void(bool, int)> callbacks);
+    void registerCallback(const std::function<void(bool, int)>& callbacks);
 
     // will be called if exit request was sent
-    void registerExitCallback(std::function<void()> callbacks);
+    [[maybe_unused]] void registerExitCallback(const std::function<void()>& callbacks);
 
     bool quit();
 

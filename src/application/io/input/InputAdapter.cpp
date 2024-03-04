@@ -2,7 +2,6 @@
 // Created by Burg on 20.05.2023.
 //
 
-#include <iostream>
 #include "InputAdapter.h"
 
 
@@ -14,11 +13,11 @@ bool InputAdapter::isDown(int keyCode) {
     return keys[keyCode];
 }
 
-void InputAdapter::registerCallback(std::function<void(bool, int)> callback) {
+void InputAdapter::registerCallback(const std::function<void(bool, int)>& callback) {
     callbacks.emplace_back(callback);
 }
 
-void InputAdapter::registerExitCallback(std::function<void()> callback) {
+void InputAdapter::registerExitCallback(const std::function<void()>& callback) {
     exitCallbacks.emplace_back(callback);
 }
 

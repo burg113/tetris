@@ -6,10 +6,10 @@
 
 #include "InputAdapter.h"
 
-class [[deprecated]] VirtualInputAdapter : public InputAdapter {
+class [[maybe_unused]] [[deprecated]] VirtualInputAdapter : public InputAdapter {
 
 public:
-    explicit VirtualInputAdapter(int size);
+    [[maybe_unused]] explicit VirtualInputAdapter(int size);
 
     void update(int key,bool state) override;
 

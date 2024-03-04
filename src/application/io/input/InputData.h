@@ -16,7 +16,7 @@ public:
     explicit InputData() = default;
     explicit InputData(int size);
 
-    bool isDown(int keyCode) const;
+    [[nodiscard]] bool isDown(int keyCode) const;
 
     void update(int keyCode,bool state);
 
