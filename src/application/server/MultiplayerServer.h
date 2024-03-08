@@ -22,7 +22,7 @@ class MultiplayerServer {
 
 public:
 
-    explicit MultiplayerServer(ServerHelper *server, Window *window);
+    explicit MultiplayerServer(ServerHelper *server);
 
     void handleSocketRead(SocketWrapper *socket, const std::string &data);
 
@@ -31,6 +31,5 @@ public:
     void render();
 
     ServerHelper *server;
-    Window *window;
     std::map<int, GameLogic> games;
 };

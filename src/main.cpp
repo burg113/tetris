@@ -23,7 +23,7 @@ using namespace std;
 int WIDTH = 1600;
 int HEIGHT = 1000;
 
-bool dedicatedServer = false;
+string mode = "client";
 bool openWindow = true;
 short debugLevel = -1;
 string host, service;
@@ -57,8 +57,8 @@ void debug(const string &s) {
     SPDLOG_INFO("debug level set to {}", debugLevel);
 }
 
-void server(const string &s) {
-    dedicatedServer = true;
+void setMode(const string &s) {
+    mode = s;
 }
 
 void hostOption(const string &s){
@@ -115,7 +115,7 @@ int32_t main(int argc, char *argv[]) {
     commandLineArguments["-nogui"] = CmdLineArg(1, noGui);
     commandLineArguments["-w"] = CmdLineArg(2, width);
     commandLineArguments["-h"] = CmdLineArg(2, height);
-    commandLineArguments["-server"] = CmdLineArg(10, server);
+    commandLineArguments["-mode"] = CmdLineArg(10, setMode);
     commandLineArguments["-host"] = CmdLineArg(7, hostOption);
     commandLineArguments["-service"] = CmdLineArg(7, serviceOption);
 
@@ -141,7 +141,15 @@ int32_t main(int argc, char *argv[]) {
         cmdLineArg.execute();
     }
 
-    if (dedicatedServer) {
+    if(mode == "multiplayer_server"){
+        asio::io_service ioService;
+        ServerHelper server(ioService, 2024);
+
+        MultiplayerServer multiplayerServer(&server);
+        multiplayerServer.run();
+    }
+
+    else if (mode == "mirror_server") {
         if (!openWindow) {
             SPDLOG_CRITICAL("cannot run mirror server without window! exiting");
             return 1;
@@ -156,15 +164,12 @@ int32_t main(int argc, char *argv[]) {
             asio::io_service ioService;
             ServerHelper server(ioService, 2024);
 
-//            MirrorServer mirrorServer(&server, &window);
-//            mirrorServer.run();
-
-            MultiplayerServer multiplayerServer(&server, &window);
-            multiplayerServer.run();
+            MirrorServer mirrorServer(&server, &window);
+            mirrorServer.run();
         }
 
 
-    } else {
+    } else if(mode == "client") {
         if (!openWindow) {
             SPDLOG_CRITICAL("cannot run game without window! exiting");
             return 1;
@@ -189,6 +194,9 @@ int32_t main(int argc, char *argv[]) {
         }
     }
 
+    else{
+        SPDLOG_CRITICAL("Invalid mode '{}'", mode);
+    }
 
     return 0;
 }
