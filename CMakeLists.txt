@@ -48,15 +48,18 @@ endif()
 if(MINGW)
     target_link_libraries(tetris ws2_32)
     target_link_libraries(tetris wsock32)
-endif()
 
-#list(APPEND CMAKE_PREFIX_PATH P:/tool/SDL2-2.28.5)
+    list(APPEND CMAKE_PREFIX_PATH P:/tool/SDL2-2.28.5)
+    # list(APPEND CMAKE_PREFIX_PATH P:/tool/spdlog/build)
+
+    include_directories(P:/tool/spdlog/include)
+else()
+    find_package(spdlog REQUIRED)
+    target_link_libraries(tetris spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>)
+endif()
 
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 target_link_libraries(tetris ${SDL2_LIBRARIES})
-
-find_package(spdlog REQUIRED)
-target_link_libraries(tetris spdlog::spdlog)
 
 add_compile_definitions(SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_TRACE)
