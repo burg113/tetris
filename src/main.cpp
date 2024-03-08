@@ -16,11 +16,12 @@
 #include "spdlog/sinks/basic_file_sink.h"
 
 /* Sets constants */
-#define WIDTH 800
-#define HEIGHT 1000
 #define DELAY 3000
 
 using namespace std;
+
+int WIDTH = 1600;
+int HEIGHT = 1000;
 
 bool dedicatedServer = false;
 bool openWindow = true;
@@ -39,7 +40,15 @@ void noGui(const string &s) {
     openWindow = false;
 }
 
-void debug(const string &s) { // todo: debug level is currently unused
+void width(const string &s) {
+    WIDTH = getInt(s);
+}
+
+void height(const string &s) {
+    HEIGHT = getInt(s);
+}
+
+void debug(const string &s) {
     debugLevel = 0;
 
     debugLevel = (short) getInt(s);
@@ -104,6 +113,8 @@ int32_t main(int argc, char *argv[]) {
 
     commandLineArguments["-debug"] = CmdLineArg(0, debug);
     commandLineArguments["-nogui"] = CmdLineArg(1, noGui);
+    commandLineArguments["-w"] = CmdLineArg(2, width);
+    commandLineArguments["-h"] = CmdLineArg(2, height);
     commandLineArguments["-server"] = CmdLineArg(10, server);
     commandLineArguments["-host"] = CmdLineArg(7, hostOption);
     commandLineArguments["-service"] = CmdLineArg(7, serviceOption);

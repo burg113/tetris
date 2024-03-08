@@ -34,6 +34,11 @@ void MultiplayerServer::handleSocketRead(SocketWrapper *socket, const std::strin
         // respond with game state after input
         stream.reset();
         stream << game;
+
+        std::vector<GameLogic> players;
+        for(auto [ind, logic] : games) if (ind != socket->getId())players.emplace_back(logic);
+        stream << players;
+
         socket->send(stream.getData());
 
         render();

@@ -19,6 +19,11 @@ class Game : public ApplicationState{
     std::deque<std::pair<int,InputData>> inputHistory;
 
     SDL_Texture *texture;
+    SDL_Rect dstRect;
+    static constexpr int otherPlayerRows = 2;
+    std::vector<SDL_Rect> otherPlayerRects;
+    std::vector<SDL_Texture*> otherPlayerTextures;
+    std::vector<GameLogic> otherPlayers;
 
     SDL_Scancode KEY_INSTA_DROP = SDL_Scancode::SDL_SCANCODE_SPACE;
     SDL_Scancode KEY_FAST_FALL = SDL_Scancode::SDL_SCANCODE_LCTRL;
